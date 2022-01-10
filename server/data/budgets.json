@@ -1,0 +1,39 @@
+[
+  {
+    "category": "Clothing",
+    "budget_name": "Budget Name",
+    "budget_amount": 2000,
+    "title": "Ad Astra"
+  },
+  {
+    "category": "Clothing",
+    "budget_name": "Budget Name",
+    "budget_amount": 2000,
+    "title": "Bloodshot"
+  },
+  {
+    "category": "Groceries",
+    "budget_name": "Budget Name",
+    "budget_amount": 2000,
+    "title": "Scoob!"
+  },
+  {
+    "category": "Miscellaneous",
+    "budget_name": "Budget Name",
+    "budget_amount": 2000,
+    "title": "Survive the Night"
+  },
+  {
+    "category": "Bill",
+    "budget_name": "Budget Name",
+    "budget_amount": 2000,
+    "title": "The Lovebirds"
+  },
+  {
+    "category": "Bill",
+    "budget_name": "Budget Name",
+    "budget_amount": 2000,
+    "title": "The Lovebirds"
+  }
+  
+]
