@@ -1,9 +1,11 @@
-from flask import Flask, render_template 
+from flask import Flask, render_template, jsonify
 from model import connect_to_db
-import os
 from flask_debugtoolbar import DebugToolbarExtension
+import crud
 
 app = Flask(__name__)
+
+
 # app.secret_key = 'ABCSECRETDEF'
 
 
@@ -16,6 +18,14 @@ def homepage():
 def dashboard():
     """Show dashboard"""
     return render_template('dashboard.html')
+
+# API ROUTES 
+
+@app.route('/api/all-users')
+def display_users():
+    """Show users"""
+    users = crud.get_users()
+    return jsonify(users)
 
 
 if __name__ == "__main__": 

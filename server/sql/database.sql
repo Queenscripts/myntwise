@@ -22,6 +22,7 @@ CREATE TABLE categories (
 );
 
 INSERT INTO categories (category_name) VALUES ('Grocery');
+INSERT INTO categories (category_name) VALUES ('Gifts');
 INSERT INTO categories (category_name) VALUES ('Clothing');
 INSERT INTO categories (category_name) VALUES ('Bill');
 INSERT INTO categories (category_name) VALUES ('Miscellaneous');
