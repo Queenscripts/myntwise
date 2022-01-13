@@ -1,0 +1,20 @@
+[
+
+  {
+    "budget_name": "Gifts",
+    "budget_amount": 2000,
+    "budget_description": "In the month of december - this is how much I spend toward this budget the most",
+    "budget_frequency": "monthly",
+    "user_id":1,
+    "category_id":1
+  },
+  {
+    "budget_name": "Grocery",
+    "budget_amount": 3000,
+    "budget_description": "In the month of december - this is how much I spend toward this budget the most",
+    "budget_frequency": "monthly",
+    "user_id":1,
+    "category_id":1
+  }
+  
+]

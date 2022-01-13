@@ -1,0 +1,42 @@
+{% extends "base.html" %} 
+{% block title %} Home {% endblock %}
+{% block javascript%}
+<script type="text/javascript">
+    console.log('testinnnng')
+    // let user = session['user_email']
+  //   window.initialData = {user}
+  //   console.log(user,  window.initialData, 'DATA')
+</script>
+{% endblock %}
+{% block styles %}
+<style>
+    main{
+        padding: 50px;
+    }
+
+</style>
+{% endblock %}
+{% block content %}
+
+{% if session['user_email'] %}
+<h1 class="text-4xl font-medium leading-tight mt-0 mb-2 text-teal-500">
+    View Deals {{session['user_email']}}
+</h1>
+{% endif %}
+
+<br>
+
+<ul class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+    {% for category in categories %}
+        <li class="block mt-4 lg:inline-block lg:mt-0 text-teal-500 hover:text-teal-900 mr-4"> {{category.category_name}}</li>
+    {% endfor%}
+</ul>
+<br>
+<br>
+
+
+
+  <br>
+  <br>
+
+{% endblock %}

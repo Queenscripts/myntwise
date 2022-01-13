@@ -1,0 +1,91 @@
+{% extends "base.html" %} 
+{% block title %} Budgets {% endblock %}
+{% block styles %}
+<style>
+    main{
+        padding: 100px;
+    }
+
+</style>
+{% endblock %}
+{% block content %}
+<h1 class="text-4xl font-medium leading-tight mt-0 mb-2 text-teal-500">
+    Your Budgets 
+</h1>
+{% for budget in budgets%}
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item bg-white border border-gray-200">
+      <h2 class="accordion-header mb-0" id="headingOne">
+        <button
+          class="
+            accordion-button
+            relative
+            flex
+            items-center
+            w-full
+            py-4
+            px-5
+            text-base text-gray-800 text-left
+            bg-white
+            border-0
+            rounded-none
+            transition
+            focus:outline-none
+          "
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapseOne"
+          aria-expanded="true"
+          aria-controls="collapseOne"
+        >
+          {{budget.budget_name}}
+        </button>
+      </h2>
+      <div
+        id="collapseOne"
+        class="accordion-collapse collapse show"
+        aria-labelledby="headingOne"
+        data-bs-parent="#accordionExample"
+      >
+        <div class="accordion-body py-4 px-5">
+          {{budget.budget_description}}
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <form class="w-full max-w-sm">
+    <div class="flex items-center border-b border-teal-500 py-2">
+        <label>{{budget.budget_name}}</label>
+      <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={{budget.budget_name}} aria-label="Full name">
+      <button class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+        Sign Up
+      </button>
+      <button class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
+        Cancel
+      </button>
+    </div>
+  </form>
+{% endfor %}
+<h2> Create a new budget</h2>
+<form action="/budgets" method="post" class="w-full max-w-sm">
+  <div class="flex items-center border-b border-teal-500 py-2">
+    <label class="text-2xl font-medium leading-tight mt-0 mb-2 text-teal-500">Your budget name</label>
+    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="budget name" aria-label="Full name">
+    <button class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
+      Sign Up
+    </button>
+    <button class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
+      Cancel
+    </button>
+  </div>
+</form>
+{% endblock %}
+
+{% block javascript %}
+
+<!-- <script>
+  console.log('USER FROM BYUDGET', user)
+</script> -->
+
+{% endblock %}

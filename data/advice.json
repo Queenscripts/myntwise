@@ -1,0 +1,24 @@
+[
+
+  {
+    "advice_name": "Save",
+    "advice_price": 2000,
+    "advice_url": "In the month of december - this is how much I spend toward this budget the most",
+    "advice_description": "monthly",
+    "advice_img":1,
+    "user_id": 1, 
+    "budget_id": 1, 
+    "category_id": 1
+  },
+  {
+    "advice_name": "Grocery",
+    "advice_price": 3000,
+    "advice_url": "In the month of december - this is how much I spend toward this budget the most",
+    "advice_description": "monthly",
+    "advice_img":1,
+    "user_id": 1, 
+    "budget_id": 1, 
+    "category_id": 1
+  }
+  
+]
