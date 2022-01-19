@@ -1,21 +1,16 @@
 {% extends "base.html" %} 
 {% block title %} Budgets {% endblock %}
 {% block styles %}
-<style>
-    main{
-        padding: 100px;
-    }
 
-</style>
 {% endblock %}
 {% block content %}
 <h1 class="text-4xl font-medium leading-tight mt-0 mb-2 text-teal-500">
     Your Budgets 
 </h1>
-{% for budget in budgets%}
 <div class="accordion" id="accordionExample">
+{% for budget in budgets%}
     <div class="accordion-item bg-white border border-gray-200">
-      <h2 class="accordion-header mb-0" id="headingOne">
+      <h2 class="accordion-header mb-0" id="heading{{budget.budget_id}}">
         <button
           class="
             accordion-button
@@ -34,50 +29,108 @@
           "
           type="button"
           data-bs-toggle="collapse"
-          data-bs-target="#collapseOne"
+          data-bs-target="#body{{budget.budget_id}}"
           aria-expanded="true"
-          aria-controls="collapseOne"
+          aria-controls="body{{budget.budget_id}}"
         >
           {{budget.budget_name}}
         </button>
       </h2>
       <div
-        id="collapseOne"
+        id="body{{budget.budget_id}}"
         class="accordion-collapse collapse show"
-        aria-labelledby="headingOne"
+        aria-labelledby="heading{{budget.budget_id}}"
         data-bs-parent="#accordionExample"
       >
         <div class="accordion-body py-4 px-5">
-          {{budget.budget_description}}
+
+          <div tabindex="0" aria-label="card 1" class="focus:outline-none lg:w-4/12 lg:mr-7 lg:mb-0 mb-7 bg-white p-6 shadow rounded">
+            <div class="flex items-center border-b border-gray-200 pb-6">
+                <!-- <img src="https://cdn.tuk.dev/assets/components/misc/doge-coin.png" alt="coin avatar" class="w-12 h-12 rounded-full" /> -->
+                <div class="flex items-start justify-between w-full">
+                    <div class="pl-3 w-full">
+                        <p tabindex="0" class="focus:outline-none text-xl font-medium leading-5 text-gray-800">{{budget.budget_description}}</p>
+                        <!-- @TODO ADD # OF TRANSACTIONS -->
+                        <!-- <p tabindex="0" class="focus:outline-none text-sm leading-normal pt-2 text-gray-500">36 members</p> -->
+                    </div>
+                    <a href="/budget/{{budget.budget_id}}">
+                      <div role="img" aria-label="bookmark">
+                          <img style="margin: -10px 60%;" onmouseover="if(this.style.opacity == 1){this.style.opacity=.5}else{this.style.opacity=1}" onmouseout="if(this.style.opacity == .5){this.style.opacity=1}else{this.style.opacity=1}" width="30%" src="https://img.icons8.com/external-icongeek26-outline-colour-icongeek26/2x/external-trash-user-interface-icongeek26-outline-colour-icongeek26.png" alt="bookmark" />
+                      </div>
+                    </a>
+                </div>
+            </div>
+            <div class="px-2">
+                <p tabindex="0" class="focus:outline-none text-sm leading-5 py-4 text-gray-600"> {{budget.budget_description}}</p>
+                <div tabindex="0" class="focus:outline-none flex">
+                    <div class="py-2 px-4 text-xs leading-3 text-indigo-700 rounded-full bg-indigo-100">{{budget.budget_description}}</div>
+                    <!-- <div class="py-2 px-4 ml-3 text-xs leading-3 text-indigo-700 rounded-full bg-indigo-100">#crypto</div> -->
+                </div>
+            </div>
+        </div>
+          
         </div>
       </div>
     </div>
-    
-  </div>
-  <form class="w-full max-w-sm">
+  <!-- <form class="w-full max-w-sm">
     <div class="flex items-center border-b border-teal-500 py-2">
         <label>{{budget.budget_name}}</label>
       <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder={{budget.budget_name}} aria-label="Full name">
       <button class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
-        Sign Up
+        Update
       </button>
-      <button class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
-        Cancel
+      <button class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="submit">
+        Delete
       </button>
     </div>
-  </form>
+  </form> -->
 {% endfor %}
-<h2> Create a new budget</h2>
-<form action="/budgets" method="post" class="w-full max-w-sm">
-  <div class="flex items-center border-b border-teal-500 py-2">
-    <label class="text-2xl font-medium leading-tight mt-0 mb-2 text-teal-500">Your budget name</label>
-    <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none" type="text" placeholder="budget name" aria-label="Full name">
-    <button class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="button">
-      Sign Up
-    </button>
-    <button class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="button">
-      Cancel
-    </button>
+</div>
+<h2 class="text-2xl font-medium leading-tight mt-0 mb-2 text-teal-500" > Create a new budget</h2>
+<form action="/budgets" method="POST">
+  <div class="shadow overflow-hidden sm:rounded-md">
+    <div class="px-4 py-5 bg-white sm:p-6">
+      <div class="grid grid-cols-6 gap-6">
+        <div class="col-span-6 sm:col-span-3">
+          <label for="budget_name" class="block text-sm font-medium text-gray-700">Budget Name</label>
+          <input type="text" name="budget_name" id="budget_name" autocomplete="given-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+        </div>
+
+        <div class="col-span-6 sm:col-span-3">
+          <label for="budget_amount" class="block text-sm font-medium text-gray-700">Budget Amount</label>
+          <input type="number" name="budget_amount" id="budget_amount" autocomplete="family-name" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md">
+        </div>
+
+        <div class="col-span-8">
+          <label for="budget_description" class="block text-sm font-medium text-gray-700">Budget Description</label>
+          <textarea type="text" name="budget_description" id="budget_description" autocomplete="email" class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"> </textarea>
+        </div>
+
+        <div class="col-span-6 sm:col-span-3">
+          <label for="budget_frequency" class="block text-sm font-medium text-gray-700">Frequency</label>
+          <select id="budget_frequency" name="budget_frequency" autocomplete="budget_frequency-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            <option>Monthly</option>
+            <option>Weekly</option>
+            <option>Annualy</option>
+          </select>
+        </div>
+
+        <div class="col-span-6 sm:col-span-3">
+          <label for="category" class="block text-sm font-medium text-gray-700">Category</label>
+          <select id="category" name="category" autocomplete="budget_category-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            {% for category in categories%}
+            <option>{{category.category_name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+        
+      </div>
+    </div>
+    <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <button type="submit" class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Save
+      </button>
+    </div>
   </div>
 </form>
 {% endblock %}
@@ -87,5 +140,5 @@
 <!-- <script>
   console.log('USER FROM BYUDGET', user)
 </script> -->
-
+<script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
 {% endblock %}

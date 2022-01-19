@@ -16,18 +16,19 @@ function Nav(props){
                     Dashboard 
                 </a>
             </li>
-            <li className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
-                  <a href="/about">
-                      About
-                  </a>
-              </li>
             { props.user  &&
               <li className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                   <a href="/budgets">
                       Budgets
                   </a>
               </li>
-            }
+            }          
+            <li className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
+                  <a href="/about">
+                      About
+                  </a>
+              </li>
+           
             {/* <li className="block mt-4 lg:inline-block lg:mt-0 text-teal-200 hover:text-white mr-4">
                 <a href="/savings">
                     Savings

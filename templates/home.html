@@ -7,15 +7,30 @@
   //   window.initialData = {user}
   //   console.log(user,  window.initialData, 'DATA')
 </script>
+<script>
+  fetch('https://developer.api.walmart.com/api-proxy/service/affil/product/v2/search?query=ipod',{
+    method: 'GET',
+    mode: 'no-cors', 
+    cache: 'no-cache', 
+    credentials: 'same-origin',
+    headers: {
+      'Content-Type': 'application/json',
+      'WM_SEC.KEY_VERSION': '1',
+      'WM_CONSUMER.ID': 'bdf33b06-d562-420a-bc31-2831d11a8016',
+      'WM_CONSUMER.INTIMESTAMP': '1642497012738',
+      'WM_SEC.AUTH_SIGNATURE': 'DcLeGjs9gHYkasf/lNzw3mrCBGn0KAywbjhYryE8c4xakPTNllncHOMjKTgzVXojeI487Kur7mrKEPvwoKIkkZG34ogjDndIVlzbS2W3cmmahBgYYws1+aJAUd3zF7TpnZYd2J9hFPK4waOqBs6QoG5BRkXbgnuBBEOFQ4ZrGEfIt1PQD1P60XINZqx6e0ZXB9l4nc4oUVT2sPTrd484mf3Rnnf02HoSxcgq4WRpJgnBMCw+9rpoKAjHtL+yJwIhPLqfhHiFCTxuMJBORjCkknnWvtLqWCEOcc8OcK1ozFBrXOtZ1CKZBjzhQKmdUW05a7Rp/Dm+GpgsZc2AFgJM7w=='
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    }}).then(data=>data).then(
+      res=>console.log('DATA', res)
+    )
+  
+</script>
 {% endblock %}
 {% block styles %}
-<style>
-    main{
-        padding: 50px;
-    }
 
-</style>
 {% endblock %}
+
+
 {% block content %}
 
 {% if session['user_email'] %}
@@ -25,6 +40,57 @@
 {% endif %}
 
 <br>
+
+<div class="container my-12 mx-auto px-4 md:px-12">
+  <div class="flex flex-wrap -mx-1 lg:-mx-4">
+
+    {% for item in advice%}
+         <!-- Column -->
+         <!-- {{item}} -->
+      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+        <!-- Article -->
+        <article class="overflow-hidden rounded-lg shadow-lg">
+
+            <a target="_blank" href="https://www.walmart.com/search?q={{item.advice_info_id}}">
+                <img alt="Placeholder" class="block h-auto w-full" src="{{item.advice_img}}">
+            </a>
+
+            <header class="flex items-center justify-between leading-tight p-2 md:p-4">
+                <h1 class="text-lg">
+                    <a class="no-underline hover:underline text-black"  target="_blank" href="https://www.walmart.com/search?q={{item.advice_info_id}}">
+                        {{item.advice_name}}
+                    </a>
+                </h1>
+                <p class="text-grey-darker text-sm">
+                    ${{item.advice_price}}
+                </p>
+            </header>
+
+            <footer class="flex items-center justify-between leading-none p-2 md:p-4">
+               
+                    
+                    <p class="ml-2 text-sm">
+                       {{item.advice_description}}
+                    </p>
+            
+                <a class="no-underline text-grey-darker hover:text-red-dark" href="#">
+                    <span class="hidden">Like</span>
+                    <i class="fa fa-heart"></i>
+                </a>
+            </footer>
+
+        </article>
+        <!-- END Article -->
+
+    </div>
+    <!-- END Column -->
+    {% endfor %}
+     
+  </div>
+  </div>
+
+
 
 <ul class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
     {% for category in categories %}

@@ -1,6 +1,7 @@
 """SQLAlchemy Database Setup"""
 
 from flask_sqlalchemy import SQLAlchemy 
+from sqlalchemy import func
 
 db= SQLAlchemy()
 
@@ -9,6 +10,7 @@ class User(db.Model):
     """ User model """
     __tablename__ = "users"
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String, nullable=False, unique=True)
     email = db.Column(db.String, nullable=False, unique=True)
     password = db.Column(db.String, nullable=False)
 
@@ -30,6 +32,7 @@ class Budget(db.Model):
     """ Budgets model """
     __tablename__ = "budgets"
     budget_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    budget_date = db.Column(db.DateTime(timezone=True), server_default=func.now())
     budget_name = db.Column(db.String, nullable=False, unique=True)
     budget_description = db.Column(db.String, nullable=False)
     budget_amount = db.Column(db.Integer, nullable=False)
@@ -40,16 +43,18 @@ class Budget(db.Model):
     # category = db.relationship("category", backref="categories")
     
     def __repr__(self):
-        return f'<Budget category_id={self.category_id} budget_name={self.budget_name} budget_description={self.budget_description}'
+        return f'<Budget user_id={self.user_id} budget_id={self.budget_id} category_id={self.category_id} budget_name={self.budget_name} budget_description={self.budget_description}'
 
 class Advice(db.Model):
     """ Advice model """
     __tablename__ = "advice"
     advice_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    advice_name = db.Column(db.String(155), nullable=False, unique=True)
-    advice_description = db.Column(db.String(500), nullable=False)
-    advice_amount = db.Column(db.Integer, nullable=False)
-    
+    advice_name = db.Column(db.String, nullable=False, unique=True)
+    advice_description = db.Column(db.String, nullable=False)
+    advice_price = db.Column(db.Integer, nullable=False)
+    advice_img = db.Column(db.String)
+    advice_info_id = db.Column(db.Integer)
+
     budget_id = db.Column(db.Integer, db.ForeignKey(Budget.budget_id))
     category_id = db.Column(db.Integer, db.ForeignKey(Categories.category_id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
@@ -57,7 +62,7 @@ class Advice(db.Model):
     # category = db.relationship("category", backref="categories")
     
     def __repr__(self):
-        return f'<Advice category_id={self.category_id} advice_name={self.advice_name} advice_description={self.advice_description}'
+        return f'<Advice category_id={self.category_id} advice_name={self.advice_name} advice_price={self.advice_price} advice_description={self.advice_description} advice_img={self.advice_img} advice_info_id={self.advice_info_id}'
 
 class User_Transactions(db.Model):
     """ User transactions model """
@@ -72,7 +77,7 @@ class User_Transactions(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
 
     def __repr__(self):
-        return f'<User user_transactions_id={self.user_id} email={self.email} password={self.password}'
+        return f'<User user_transactions_id={self.user_id} user_transactions_name={self.user_transactions_name} user_transactions_amount={self.user_transactions_amount} user_transactions_date={self.user_transactions_date}'
 
 
 
@@ -81,6 +86,8 @@ def connect_to_db(app):
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
+    app.config["CELERY_BROKER_URL"] = "sqla+postgresql://queensform@localhost/dev_myntwise"
+    app.config["CELERY_BACKEND"] = "db+postgresql://localhost/dev_myntwise"
     db.app = app 
     db.init_app(app)
 
