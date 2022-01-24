@@ -192,7 +192,7 @@
 
             <footer class="flex flex-col items-center justify-between leading-none p-1">
               <p class="ml-2 text-sm p-2">
-                {{item.advice_description|truncate(400)}}
+                {{item.advice_description|truncate(100, True)}}
               </p>
               <p class="ml-2 text-sm p-2" >
                 {% set budget_count = namespace(value=0) %}
@@ -241,6 +241,7 @@
 
   <br>
   <br>
+  {{user}}!!
   <script>
     function openPopover(event,popoverID){
       let element = event.target;
@@ -253,7 +254,7 @@
       document.getElementById(popoverID).classList.toggle("hidden");
     }
   </script>
- 
+  
   <script> 
   function priceQuery(){
     let max = document.getElementById('max').value

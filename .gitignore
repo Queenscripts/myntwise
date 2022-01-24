@@ -5,8 +5,20 @@ env
 server/__pycache__
 secrets.sh
 .env
+node_modules/
 index.js
-
+services.py
+walmart_sig_gen.log
+WM_IO_my_rsa_key_pair
+WM_IO_public_key.pem
+WM_IO_private_key.pem
+celerydb.py
+settings.py
+static/img/biteyes.jpg
+walmart-api.py
+key.txt
+package-lock.json
+package.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

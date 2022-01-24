@@ -1,5 +1,6 @@
 from model import db, User, User_Transactions, Budget, Categories, Advice, connect_to_db
 # from server import budgets, transactions
+from sqlalchemy.sql import functions
 
 # CRUD FOR USERS
 def get_users():
@@ -56,9 +57,9 @@ def create_budget(budget_name, budget_amount, budget_description, budget_frequen
 
     return budget
 
-def get_budgets():
+def get_budgets_and_transactions(user_id):
     """Get all budgets"""
-    return Budget.query.all()
+    return db.session.query(Budget, User_Transactions).filter_by(user_id=user_id).join(User_Transactions, Budget.budget_id==User_Transactions.budget_id, isouter=True).all()
 
 def get_user_budgets(user_id):
     """" Get all budgets for user """
@@ -73,13 +74,19 @@ def delete_budget(id):
     Budget.query.filter_by(budget_id=id).delete()
     db.session.commit()
     return f"Deleted budget id: {id}"
+
+def update_budget(id,entity):
+    """Update budget"""
+    budget = Budget.query.get(id)
+    budget.entity.name = entity.vall
+    db.session.commit()
+
 # CRUD FOR USER TRANSACTIONS
 def get_user_transactions(user_id): 
     """ Get all transactions for user """
-    return User_Transactions.query.filter_by(user_id=user_id).all()
+    return db.session.query(User_Transactions, Budget, Categories).filter_by(user_id=user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.category_id==Categories.category_id).all()
 
-
-def create_user_transaction(user_transactions_name, user_transactions_amount, user_transactions_date, budget_id, category_id, user_id): 
+def create_user_transaction(user_transactions_name, user_transactions_amount, user_transactions_date, budget_id, category_id, user_id, user_transactions_processed): 
     """ Create User Transaction """
     transaction = User_Transactions(
         user_transactions_name=user_transactions_name, 
@@ -87,20 +94,45 @@ def create_user_transaction(user_transactions_name, user_transactions_amount, us
         user_transactions_date=user_transactions_date, 
         budget_id=budget_id, 
         category_id=category_id,
-        user_id=user_id
+        user_id=user_id,
+        user_transactions_processed=user_transactions_processed
     )
     db.session.add(transaction)
     db.session.commit()
     return transaction
     
+def update_user_transaction(id,entity):
+    """Update Transaction"""
+    transaction = User_Transactions.query.get(id)
+    transaction.entity.name = entity.vall
+    db.session.commit()
+
+def delete_transaction(id):
+    """Delete Transaction"""
+    User_Transactions.query.filter_by(user_transactions_id=id).delete()
+    db.session.commit()
+    return f"Deleted transaction id: {id}"
+
 # CRUD FOR ADVICE
 def get_advice():
     """Get all advice"""
     return Advice.query.all()
 
+def get_advice_by_user_id(user_id):
+    """Get all advice"""
+    return Advice.query.filter_by(user_id=user_id).all()
+
 def get_advice_by_id(advice_id): 
     """Get advice by ID"""
     return Advice.get(advice_id)
+
+def filter_advice_by_price(min_price, max_price):
+    """Filter advice by price"""
+    return Advice.query.filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price).all()
+
+def filter_advice_by_category(category_id):
+    """Filter advice by price"""
+    return Advice.query.filter(Advice.category_id==category_id).all()
 
 def create_advice(advice_name,  advice_price, advice_description, advice_info_id, category_id, advice_img):
     """Create advice"""
@@ -111,6 +143,22 @@ def create_advice(advice_name,  advice_price, advice_description, advice_info_id
         advice_info_id=advice_info_id,
         category_id=category_id,
         advice_img=advice_img
+    )
+    db.session.add(advice)
+    db.session.commit()
+
+    return advice
+
+def create_advice_for_user(advice_name,  advice_price, advice_description, advice_info_id, category_id, advice_img,user_id):
+    """Create advice"""
+    advice = Advice(
+        advice_name=advice_name, 
+        advice_price=advice_price, 
+        advice_description= advice_description, 
+        advice_info_id=advice_info_id,
+        category_id=category_id,
+        advice_img=advice_img,
+        user_id=user_id
     )
     db.session.add(advice)
     db.session.commit()
@@ -129,6 +177,28 @@ def get_budgets_count(user_id):
 def get_categories_count(user_id): 
     """ Get number of budgets by category for user """
     return Budget.query.filter_by(user_id=user_id).join(Categories, Budget.category_id==Categories.category_id).count()
+
+def get_total_transaction_amount(user_id): 
+    """Get total of prices of transactions- purchased"""
+    return db.session.query(Budget.budget_amount-functions.sum(User_Transactions.user_transactions_amount)).filter(Budget.user_id==user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.user_transactions_processed==True).group_by(Budget.budget_id).all()
+
+def get_budget_amount(user_id): 
+    """Get total of prices of transactions- purchased"""
+    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
+
+
+def get_total_transaction_amount(user_id): 
+    """Get total of prices of transactions- not purchased"""
+    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
+
+def get_total_transaction_saved(user_id): 
+    """Get all transactions- not purchased"""
+    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+
+def get_total_transactions(user_id): 
+    """Get all transactions info- not purchased"""
+    return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+
 
 if __name__ == "__main__":
     from server import app

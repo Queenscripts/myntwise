@@ -5,11 +5,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myntwise | {% block title %} {% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tw-elements/dist/css/index.min.css" />
+    <script src="https://kit.fontawesome.com/234094c5cb.js" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
-
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
     <style>
       
@@ -18,42 +19,42 @@
     }
 
 
-        #navbar {
-  background-color: #333; /* Black background color */
-  position: fixed; /* Make it stick/fixed */
-  top: -50px; /* Hide the navbar 50 px outside of the top view */
-  width: 100%; /* Full width */
-  transition: top 0.3s; /* Transition effect when sliding down (and up) */
-}
+    #navbar {
+      background-color: #333; /* Black background color */
+      position: fixed; /* Make it stick/fixed */
+      top: -50px; /* Hide the navbar 50 px outside of the top view */
+      width: 100%; /* Full width */
+      transition: top 0.3s; /* Transition effect when sliding down (and up) */
+    }
 
-/* Style the navbar links */
-#navbar a {
-  float: left;
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 15px;
-  text-decoration: none;
-}
+    /* Style the navbar links */
+    #navbar a {
+      float: left;
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      text-decoration: none;
+    }
 
-#navbar a:hover {
-  background-color: #ddd;
-  color: black;
-}
-#hero{
-    margin: -15% 0;
-    height: 100%;
-}
-nav>img{
-    opacity: .5;
-}
-    </style>
-    
-    {% block styles %} {% endblock %}
+    #navbar a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+    #hero{
+        margin: -15% 0;
+        height: 100%;
+    }
+    nav>img{
+        opacity: .5;
+    }
+        </style>
+        
+        {% block styles %} {% endblock %}
 </head>
 <body>
     
-    <nav class="flex sticky top-0 items-center justify-between flex-wrap bg-teal-500 p-6" id="nav"></nav>
+    <nav class="z-10 flex sticky top-0 items-center justify-between flex-wrap bg-teal-500 p-6" id="nav"></nav>
     <div class="py-20 relative h-65 overflow-hidden" style="background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -61,15 +62,22 @@ nav>img{
     background-image: linear-gradient(
 7deg, #9b1aacdb 0%, #089280a6 100%), url(../static/img/biteyes.jpg);">
         <h2 class="text-4xl font-bold mb-2 text-white" style="padding: 0 40px;">
-            Make Smart Money Choices {{session['user_email']}}
+            Make Smart Money Choices {% if user %}{{user.name}} {% endif %}
         </h2>
         <h3 class="text-2xl mb-8 text-gray-200"  style="padding: 0 40px;">
         Monitor your finances and get suggestions on where to shop.
         </h3>
     <div class="container mx-10 ">
-    <button onclick="window.location='/login'" class="bg-white font-bold rounded-full py-4 px-8 shadow-lg uppercase tracking-wider">
-      Login
-    </button>
+      {% if user or session['user_email'] %}
+      
+      <button onclick="window.location='/'" class="bg-white font-bold rounded-full py-4 px-8 shadow-lg uppercase tracking-wider">
+        Get Deals
+      </button>
+      {% else %}
+      <button onclick="window.location='/login'" class="bg-white font-bold rounded-full py-4 px-8 shadow-lg uppercase tracking-wider">
+        Login
+      </button>
+    {% endif %}
   </div>
 </div>
     <div id="root"></div>
@@ -356,19 +364,21 @@ nav>img{
         } else{
             user = document.currentScript.getAttribute('data-user')
         }
-        console.log('USR FRO BASE', user)
     </script>
     <script type="text/babel" test = "test" data-user=user src="../static/nav.js"></script>
     <script type="text/javascript" >
-        window.onscroll = function() {scrollFunction()};
+//         window.onscroll = function() {scrollFunction()};
 
-function scrollFunction() {
-  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-    document.getElementById("navbar").style.top = "0";
-  } else {
-    document.getElementById("navbar").style.top = "-50px";
-  }
-}
+// function scrollFunction() {
+//   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+//     document.getElementById("navbar").style.top = "0";
+//   } else {
+//     document.getElementById("navbar").style.top = "-50px";
+//   }
+// }
     </script> 
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+    
 </body>
 </html>

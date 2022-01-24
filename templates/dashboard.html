@@ -14,12 +14,192 @@
 <!-- LIST SECTION -->
 {% if budget_count or transaction_count or categories_count%}
 <p>
-  You have {{budget_count}} budgets 
+  You have {{budget_count}} budgets
+  <br> 
   You have {{transaction_count}} transactions 
+  <br>
   You have {{categories_count}} categories
-{% endif %}
+  <br>
+  Total spend: {{transactions_total[0][0]}}
+  <br>
+  Saved Total: {{saved_transactions[0][0]}}
+  <br>
+  Saved Transactions :  
+  {% for saved in saved_info %}
+  {{saved.user_transactions_name}}
+  {% endfor %}
 </p>
-<div class="sm:px-6 w-full">
+{% endif %}
+
+<div class="table w-full p-2">
+  <table class="w-full border">
+      <thead>
+          <tr class="bg-gray-50 border-b">
+              <th class="border-r p-2">
+                  <input type="checkbox">
+              </th>
+
+              <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div class="flex items-center justify-center">
+                      Name
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                      </svg>
+                  </div>
+              </th>
+              <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div class="flex items-center justify-center">
+                      Amount
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                      </svg>
+                  </div>
+              </th>
+              <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div class="flex items-center justify-center">
+                    Budget
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                    </svg>
+                </div>
+            </th>
+            <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div class="flex items-center justify-center">
+                    Category
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                    </svg>
+                </div>
+            </th>
+              <th class="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div class="flex items-center justify-center">
+                      Date
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                      </svg>
+                  </div>
+              </th>
+              <th class="p-10 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div class="flex items-center justify-center">
+                      Action
+                      <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                      </svg> -->
+                  </div>
+              </th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr class="bg-gray-50 text-center">
+              <td class="p-2 border-r">
+              </td>
+              <td class="p-2 border-r">
+                 
+                <input form="transaction" id='tname' type="text" class="border p-1">
+                 
+              </td>
+              <td class="p-2 border-r">
+                <input form="transaction" id='tamount' type="number" class="border p-1">
+            </td>
+            <td class="p-2 border-r">
+                <select id="budget" name="budget" autocomplete="user_transaction_frequency-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {% for budget in budgets%}
+                        <option>
+                            {{budget.budget_name}}
+                        </option>
+                    {% endfor %}
+              </select>
+              </td>
+              <td class="p-2 border-r">
+                <select id="category" name="category" autocomplete="user_transaction_category-name" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    {% for category in categories%}
+                    <option>{{category.category_name}}</option>
+                    {% endfor %}
+                  </select>
+              </td>
+              <td class="p-2 border-r">
+                <input form="transaction" id='tdate' type="date" class="border p-1">
+              </td>
+              
+              
+              <td>
+                <button type="submit" form="transaction" onclick="sendTransaction()" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Add</button>
+            </td>
+              
+          </tr>
+          {% for transaction in transactions%}
+
+          <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
+              <td class="p-2 border-r">
+                  <input type="checkbox"> 
+              </td>
+              <td class="p-2 border-r">{{transaction[0].user_transactions_name}}</td>
+              <td class="p-2 border-r">{{transaction[0].user_transactions_amount}}</td>
+              <td class="p-2 border-r">{{transaction[1].budget_name}}</td>
+              <td class="p-2 border-r">{{transaction[2].category_name}}</td>
+              <td class="p-2 border-r">{{transaction[0].user_transactions_date}}</td>
+              <td>
+                  <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
+                  <a href="/transaction/{{transaction[0].user_transactions_id}}" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+              </td>
+          </tr>
+          {% endfor %}
+          <!-- <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
+              <td class="p-2 border-r">
+                  <input type="checkbox">
+              </td>
+              <td class="p-2 border-r">2</td>
+              <td class="p-2 border-r">Adam Smith</td>
+              <td class="p-2 border-r">adam@gmail.com</td>
+              <td class="p-2 border-r">Sydney, Australia</td>
+              <td>
+                  <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
+                  <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+              </td>
+          </tr>
+          <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
+              <td class="p-2 border-r">
+                  <input type="checkbox">
+              </td>
+              <td class="p-2 border-r">3</td>
+              <td class="p-2 border-r">Jean Doe</td>
+              <td class="p-2 border-r">jean@gmail.com</td>
+              <td class="p-2 border-r">Sydney, Australia</td>
+              <td>
+                  <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
+                  <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+              </td>
+          </tr>
+          <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
+              <td class="p-2 border-r">
+                  <input type="checkbox">
+              </td>
+              <td class="p-2 border-r">3</td>
+              <td class="p-2 border-r">Jean Doe</td>
+              <td class="p-2 border-r">jean@gmail.com</td>
+              <td class="p-2 border-r">Sydney, Australia</td>
+              <td>
+                  <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
+                  <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+              </td>
+          </tr>
+          <tr class="bg-gray-100 text-center border-b text-sm text-gray-600">
+              <td class="p-2 border-r">
+                  <input type="checkbox">
+              </td>
+              <td class="p-2 border-r">3</td>
+              <td class="p-2 border-r">Jean Doe</td>
+              <td class="p-2 border-r">jean@gmail.com</td>
+              <td class="p-2 border-r">Sydney, Australia</td>
+              <td>
+                  <a href="#" class="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin">Edit</a>
+                  <a href="#" class="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin">Remove</a>
+              </td>
+          </tr> -->
+      </tbody>
+  </table>
+</div>
+<!-- <div class="sm:px-6 w-full">
     <div class="px-4 md:px-10 py-4 md:py-7">
         <div class="flex items-center justify-between">
             <p tabindex="0" class="focus:outline-none text-base sm:text-lg md:text-xl lg:text-2xl font-bold leading-normal text-gray-800">Transactions</p>
@@ -64,7 +244,7 @@
                     <th  id="transaction-date"> Date </th>
                     <th  id="transaction-budget"> Budget </th>
                         {% for transaction in transactions%}
-                        <tr tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded">
+                        <tr tabindex="0" class="focus:outline-none h-16 border border-gray-100 rounded"> -->
                         <!-- <td>
                             <div class="ml-5">
                                 <div class="bg-gray-200 rounded-sm w-5 h-5 flex flex-shrink-0 justify-center items-center relative">
@@ -75,24 +255,24 @@
                                 </div>
                             </div>
                         </td> -->
-                        <td class="">
+                        <!-- <td class="">
                             <div class="flex items-center pl-5">
-                                <p class="text-base font-medium leading-none text-gray-700 mr-2">{{transaction.user_transactions_name}}</p>
+                                <p class="text-base font-medium leading-none text-gray-700 mr-2">{{transaction.user_transactions_name}}</p> -->
                                 <!-- <img src="../svgs/svg1.svg" alt="clip"> -->
-                            </div>
+                            <!-- </div>
                         </td>
                         <td class="pl-24">
-                            <div class="flex items-center">
+                            <div class="flex items-center"> -->
                                <!-- <img src="../svgs/svg2.svg" alt="tag"> -->
-                                <p class="text-sm leading-none text-gray-600 ml-2">{{transaction.user_transactions_amount}}</p>
+                                <!-- <p class="text-sm leading-none text-gray-600 ml-2">{{transaction.user_transactions_amount}}</p>
                             </div>
                         </td>
                         <td class="pl-5">
-                            <div class="flex items-center">
+                            <div class="flex items-center"> -->
                                <!-- <img src="../svgs/svg3.svg" alt="list"> -->
-                                <p class="text-sm leading-none text-gray-600 ml-2">{{transaction.user_transactions_date}}</p>
+                                <!-- <p class="text-sm leading-none text-gray-600 ml-2">{{transaction.user_transactions_date}}</p>
                             </div>
-                        </td>
+                        </td> -->
                         <!-- <td class="pl-5">
                             <div class="flex items-center">
                                 <img src="../svgs/svg4.svg" alt="chat">
@@ -108,14 +288,14 @@
                         <td class="pl-5">
                             <button class="py-3 px-3 text-sm focus:outline-none leading-none text-red-700 bg-red-100 rounded">Due today at 18:00</button>
                         </td> -->
-                        <td class="pl-4">
+                        <!-- <td class="pl-4">
                             <button class="focus:ring-2 focus:ring-offset-2 focus:ring-red-300 text-sm leading-none text-gray-600 py-3 px-5 bg-gray-100 rounded hover:bg-gray-200 focus:outline-none">View</button>
                         </td>
                         <td>
                             <div class="relative px-5 pt-2">
-                                <button class="focus:ring-2 rounded-md focus:outline-none" onclick="dropdownFunction(this)" role="button" aria-label="option">
+                                <button class="focus:ring-2 rounded-md focus:outline-none" onclick="dropdownFunction(this)" role="button" aria-label="option"> -->
                                    <!-- <img  class="dropbtn" onclick="dropdownFunction(this)" src="../svgs/svg6.svg" alt="dropdown"> -->
-                                </button>
+                                <!-- </button>
                                 <div class="dropdown-content bg-white shadow w-24 absolute z-30 right-0 mr-6 hidden">
                                     <div tabindex="0" class="focus:outline-none focus:text-indigo-600 text-xs w-full hover:bg-indigo-700 py-4 px-4 cursor-pointer hover:text-white">
                                         <p>Edit</p>
@@ -138,7 +318,7 @@
     .checkbox:checked + .check-icon {
         display: flex;
     }
-</style>
+</style> -->
 
 
 
@@ -194,7 +374,7 @@ populateChart()
 </script> -->
 
 <!-- FORM SECTION -->
-<h2 class="text-2xl font-medium leading-tight mt-0 mb-2 text-teal-500" > Add New Transaction</h2>
+<!-- <h2 class="text-2xl font-medium leading-tight mt-0 mb-2 text-teal-500" > Add New Transaction</h2>
 
 <form action="/transactions" method="POST">
   <div class="shadow overflow-hidden sm:rounded-md">
@@ -245,10 +425,10 @@ populateChart()
   </div>
 </form>
 
-<div class="shadow-lg rounded-lg overflow-hidden">
+<div class="shadow-lg rounded-lg overflow-hidden"> -->
 <!-- <div class="py-3 px-5 bg-gray-50">Bar chart of your spending</div>
 <canvas class="p-10" id="chartBar"></canvas> -->
-</div>
+<!-- </div> -->
   
   <!-- Required chart.js -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
@@ -339,4 +519,149 @@ populateChart()
 }
   </script> -->
   <!-- <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script> -->
+
+<h3 class="text-3xl font-medium leading-tight mt-0 mb-2 text-blue-600"> Suggested for you:</h3>
+
+<div class="flex flex-wrap -mx-1 lg:-mx-4">
+    {% set count = namespace(value=0) %}
+    <!-- {% set budget_count = namespace(value=0) %}
+    {% for budget in budgets%}
+        {% set budget_count.value = budget_count.value + 1 %}
+    {% endfor %} -->
+      {% for item in users_advice%}
+         <!-- Column -->
+         <!-- {{item}} -->
+      <div class="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+
+        <!-- Article -->
+        <article class="flex flex-col overflow-hidden rounded-lg shadow-lg">
+          <button class="no-underline text-grey-darker hover:text-red-dark self-end p-4" href="#" onclick="saveAdvice(event)">
+            <span class="">Add</span>
+            
+            <i class="fa fa-heart text-red-400 hover:text-red-500"></i>
+            <!-- TODO
+              Add tooltip: https://tailwind-elements.com/docs/standard/components/tooltip/
+            -->
+          </button>
+            <a target="_blank" href="https://www.walmart.com/search?q={{item.advice_info_id}}">
+                <img alt="Placeholder" class="block h-auto w-full" src="{{item.advice_img}}">
+            </a>
+
+            <header class="flex direct flex-col justify-between leading-tight p-1">
+              <h3 id="price" class="text-grey-darker text-md font-black p-2">
+                ${{item.advice_price}}
+              </h3> 
+              <h2 class="text-md p-2">
+                    <a class="no-underline hover:underline text-black font-medium"  target="_blank" href="https://www.walmart.com/search?q={{item.advice_info_id}}">
+                        {{item.advice_name}}
+                        
+                    </a>
+                </h2>
+                
+            </header>
+
+            <footer class="flex flex-col items-center justify-between leading-none p-1">
+              <p class="ml-2 text-sm p-2">
+                {{item.advice_description|truncate(200, True)}}
+              </p>
+              <p class="ml-2 text-sm p-2" >
+                {% set budget_count = namespace(value=0) %}
+
+                {% for budget in budgets%}
+
+                <!-- {{budget.budget_amount}} -->
+
+                <p class="formula ml-2 text-sm p-2">
+                  {% if percentages[budget_count.value][count.value] >100 %} 
+                  <span class="text-red-500"> {{percentages[budget_count.value][count.value]}}%  </span>
+                  of your {{budget.budget_frequency}} {{budget.budget_name}}budget</p>
+                  {% elif percentages[budget_count.value][count.value] < 100 and percentages[budget_count.value][count.value] > 50 %}
+                  <span class="text-yellow-500"> {{percentages[budget_count.value][count.value]}}%</span>
+                  of your {{budget.budget_frequency}} {{budget.budget_name}} budget</p>
+                  {% else %}
+                  <span class="text-green-500"> {{percentages[budget_count.value][count.value]}}%</span>
+                  of your {{budget.budget_frequency}} {{budget.budget_name}} budget</p>
+                  {% endif %}
+                {% set budget_count.value = budget_count.value + 1 %}
+
+                {% endfor %}
+                
+                {% set count.value = count.value + 1 %}
+              </p> 
+            </footer>
+
+        </article>
+        <!-- END Article -->
+
+    </div>
+    <!-- END Column -->
+    
+    {% endfor %}
+     
+  </div>
+  <script>
+      sendTransaction=()=>{
+        let user_transactions_name = document.querySelector('#tname').value
+        let user_transactions_date = document.querySelector('#tdate').value
+        let user_transactions_amount = document.querySelector('#tamount').value
+        let budget = document.querySelector('#budget').value
+        let category = document.querySelector('#category').value
+        
+        payload= {
+            user_transactions_name,
+            user_transactions_date,
+            user_transactions_amount,
+            user_transactions_processed: true,
+            budget, 
+            category
+        }
+
+        fetch('/transactions', {
+            method: 'POST', 
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            mode: 'same-origin',
+            body: JSON.stringify(payload)
+        }).then(data=>console.log('DATA', data))
+        generateAdvice()
+      }
+      
+      generateAdvice = ()=>{
+        let user_transactions_name = document.querySelector('#tname').value
+          fetch('http://localhost:5000?' + new URLSearchParams({
+    query: user_transactions_name,
+   
+})
+          )}
+          
+ </script>
+
+<script  data-user={{user.user_id}}>
+  console.log('USER', document.currentScript.getAttribute("data-user"))
+const user_id=document.currentScript.getAttribute("data-user")
+saveAdvice=(e)=>{
+let user_transactions_name= e.path[3].children[0].children[2].children[1].children[0].innerHTML.trim()
+let user_transactions_amount = parseInt(e.path[3].children[0].children[2].children[0].innerHTML.trim().substring(1))
+let user_transactions_date = new Date(Date.now()).toISOString()
+let user_transactions_processed = false 
+let budget = null
+let category = null
+data={
+user_transactions_name,
+user_transactions_amount,
+user_transactions_date,
+budget, 
+category,
+user_id, 
+user_transactions_processed:false,
+}
+fetch('/transactions',{
+method: "POST",
+mode: "no-cors",
+headers:{"Content-Type": "application/json"},
+body: JSON.stringify(data)
+})
+}
+</script>
 {% endblock %}

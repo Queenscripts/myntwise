@@ -6,7 +6,8 @@
     "advice_info_id": 401977694,
     "advice_description": "This item is REFURBISHEDStream 50 million songs with Apple Music and load your favorites. Experience amazing gaming and augmented reality apps with the A10 Fusion chip. Featuring a 4-inch Retina display that gives you a beautiful canvas for photos and video. Stay connected to family and friends with Messages and Group FaceTime. And add more personality to your selfies with stickers and filters.",
     "advice_img":"https://i5.walmartimages.com/asr/32dffd88-b9ed-4a0e-a9e1-245e328b7662_1.363897f205bab797d2100d49757046e4.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff",
-    "category_id": 3
+    "category_id": 3,
+    "user_id": 1
   },
   {
     "advice_name": "Hisense 58\" Class 4K UHD LCD Roku Smart TV HDR R6 Series 58R6E3",
@@ -14,7 +15,8 @@
     "advice_info_id": 587182688,
     "advice_description": "The Hisense 58\" Class 4K UHD HDR Roku Smart TV is designed with a gorgeous bezel-less design and packs incredible detail into its 4K Ultra HD Dolby Vision HDR-enhanced display. Plus, with Roku TV, it's easy to watch what you love with quick access to thousands of streaming channels, and live TV. More than a smart TV, the Hisense 58\" Class 4K UHD HDR Roku Smart TV is a better TV.",
     "advice_img":"https://i5.walmartimages.com/asr/e00046a4-2eb3-48dc-b9ab-f0b750c384a7_1.fbb6003cb707252842bc913860c28568.jpeg?odnHeight=450&odnWidth=450&odnBg=ffffff",
-    "category_id": 3
+    "category_id": 4,
+    "user_id": 1
   }
   
 ]

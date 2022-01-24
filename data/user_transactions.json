@@ -6,7 +6,8 @@
     "user_transactions_date": "2022-03-16",
     "budget_id": 1,
     "user_id":1,
-    "category_id":1
+    "category_id":1,
+    "user_transactions_processed": false
   },
   {
     "user_transactions_name": "Grocery",
@@ -14,7 +15,8 @@
     "user_transactions_date": "2022-03-16",
     "budget_id": 1,
     "user_id":1,
-    "category_id":1
+    "category_id":1,
+    "user_transactions_processed": false
   }
   
 ]

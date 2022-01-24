@@ -1,5 +1,6 @@
 """SQLAlchemy Database Setup"""
 
+from xmlrpc.client import Boolean
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy import func
 
@@ -15,7 +16,7 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
 
     def __repr__(self):
-        return f'<User user_id={self.user_id} email={self.email} password={self.password}>'
+        return f'<User user_id={self.user_id} name={self.name} email={self.email} password={self.password}>'
 
 class Categories(db.Model):
     """ Categories model """
@@ -40,10 +41,11 @@ class Budget(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
     # user = db.relationship("User", backref="users")
     category_id = db.Column(db.Integer, db.ForeignKey(Categories.category_id))
+    
     # category = db.relationship("category", backref="categories")
     
     def __repr__(self):
-        return f'<Budget user_id={self.user_id} budget_id={self.budget_id} category_id={self.category_id} budget_name={self.budget_name} budget_description={self.budget_description}'
+        return f'<Budget user_id={self.user_id} budget_id={self.budget_id} category_id={self.category_id} budget_name={self.budget_name} budget_description={self.budget_description} budget_amount={self.budget_amount}'
 
 class Advice(db.Model):
     """ Advice model """
@@ -62,7 +64,7 @@ class Advice(db.Model):
     # category = db.relationship("category", backref="categories")
     
     def __repr__(self):
-        return f'<Advice category_id={self.category_id} advice_name={self.advice_name} advice_price={self.advice_price} advice_description={self.advice_description} advice_img={self.advice_img} advice_info_id={self.advice_info_id}'
+        return f'<Advice user_id={self.user_id} category_id={self.category_id} advice_name={self.advice_name} advice_price={self.advice_price} advice_description={self.advice_description} advice_img={self.advice_img} advice_info_id={self.advice_info_id}'
 
 class User_Transactions(db.Model):
     """ User transactions model """
@@ -71,13 +73,13 @@ class User_Transactions(db.Model):
     user_transactions_name = db.Column(db.String, nullable=False, unique=True)
     user_transactions_amount = db.Column(db.Integer, nullable=False)
     user_transactions_date = db.Column(db.Date)
-
+    user_transactions_processed = db.Column(db.Boolean, unique=False, default=True)
     budget_id = db.Column(db.Integer, db.ForeignKey(Budget.budget_id))
     category_id = db.Column(db.Integer, db.ForeignKey(Categories.category_id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
 
     def __repr__(self):
-        return f'<User user_transactions_id={self.user_id} user_transactions_name={self.user_transactions_name} user_transactions_amount={self.user_transactions_amount} user_transactions_date={self.user_transactions_date}'
+        return f'<User user_transactions_processed={self.user_transactions_processed} user_transactions_id={self.user_id} user_transactions_name={self.user_transactions_name} user_transactions_amount={self.user_transactions_amount} user_transactions_date={self.user_transactions_date} budget_id={self.budget_id} category_id={self.category_id}'
 
 
 
