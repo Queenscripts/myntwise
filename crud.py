@@ -187,10 +187,6 @@ def get_budget_amount(user_id):
     return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
 
 
-def get_total_transaction_amount(user_id): 
-    """Get total of prices of transactions- not purchased"""
-    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
-
 def get_total_transaction_saved(user_id): 
     """Get all transactions- not purchased"""
     return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
@@ -198,6 +194,11 @@ def get_total_transaction_saved(user_id):
 def get_total_transactions(user_id): 
     """Get all transactions info- not purchased"""
     return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+
+def get_total_sum_transactions(user_id): 
+    """Get all transactions info- not purchased"""
+    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
+
 
 
 if __name__ == "__main__":

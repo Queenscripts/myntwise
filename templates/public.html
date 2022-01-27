@@ -75,26 +75,27 @@
     
     <div class="flex justify-between items-center py-5">
       <div>
-        <input type="text" maxlength="5" x-on:input="mintrigger" x-model="minprice" class="px-3 py-2 border border-gray-200 rounded w-24 text-center">
+        <input type="text"  x-on:input="mintrigger" x-model="minprice" class="px-3 py-2 border border-gray-200 rounded w-24 text-center">
       </div>
       <div>
-        <input type="text" maxlength="5" x-on:input="maxtrigger" x-model="maxprice" class="px-3 py-2 border border-gray-200 rounded w-24 text-center">
+        <input type="text" x-on:input="maxtrigger" x-model="maxprice" class="px-3 py-2 border border-gray-200 rounded w-24 text-center">
       </div>
     </div>
     
   </div>
 
 <script data-min = {{prices|min}} data-max= {{prices|max}}>
-   let min_num = document.currentScript.getAttribute('data-min')
-   let max_num = document.currentScript.getAttribute('data-max')
+   let min_num = document.currentScript.getAttribute('data-min') || (new URL(document.location)).searchParams.get('min')
+   let max_num = document.currentScript.getAttribute('data-max') || (new URL(document.location)).searchParams.get('max')
+   console.log()
    function range() {
         return {
           minprice: min_num, 
           maxprice: max_num,
           min: min_num, 
           max: max_num,
-          minthumb: 0,
-          maxthumb: 0, 
+          // minthumb: 0,
+          // maxthumb: 0, 
           
           mintrigger() {   
             this.minprice = Math.min(this.minprice, this.maxprice);      
@@ -241,7 +242,6 @@
 
   <br>
   <br>
-  {{user}}!!
   <script>
     function openPopover(event,popoverID){
       let element = event.target;
@@ -256,6 +256,7 @@
   </script>
   
   <script> 
+
   function priceQuery(){
     let max = document.getElementById('max').value
     let min = document.getElementById('min').value

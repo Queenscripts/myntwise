@@ -9,15 +9,12 @@
     <script src="https://kit.fontawesome.com/234094c5cb.js" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/tw-elements/dist/js/index.min.js"></script>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico')}}">
     <style>
       
-    main{
-        padding: 30px 90px;
-    }
-
 
     #navbar {
       background-color: #333; /* Black background color */
@@ -80,8 +77,6 @@
     {% endif %}
   </div>
 </div>
-    <div id="root"></div>
-
     <main>
         {% for msg in get_flashed_messages() %}
         <p class="flash-msg">
@@ -359,23 +354,16 @@
     <script data-user={{session['user_email']}} type="text/javascript">
         let user;
         if(document.currentScript.getAttribute('data-user') == 'type="text/javascript"'){
-            console.log('!', document.currentScript.getAttribute('data-user'))
             user = ''
         } else{
             user = document.currentScript.getAttribute('data-user')
         }
     </script>
-    <script type="text/babel" test = "test" data-user=user src="../static/nav.js"></script>
-    <script type="text/javascript" >
-//         window.onscroll = function() {scrollFunction()};
+    <script type="text/babel" test = "test" data-user=user src="../static/components/Nav.jsx"></script>
+    <script type="text/babel" src="../static/components/Dashboard/Dashboard.jsx"></script>
 
-// function scrollFunction() {
-//   if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-//     document.getElementById("navbar").style.top = "0";
-//   } else {
-//     document.getElementById("navbar").style.top = "-50px";
-//   }
-// }
+    <script type="text/javascript" >
+
     </script> 
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>

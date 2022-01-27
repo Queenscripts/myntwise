@@ -126,7 +126,7 @@
                         <p tabindex="0" class="focus:outline-none text-sm leading-normal pt-2 text-gray-500">{{transaction[1].user_transactions_name}} : {{transaction[1].user_transactions_amount}}</p>
                         {% endif %}
                         {% endfor %}
-                        Diff: {{diff[0]}}
+                        Diff: {{diff[0][0]}}
                     </div>
                     <a href="/budget/{{budget.budget_id}}">
                       <div role="img" aria-label="bookmark">
