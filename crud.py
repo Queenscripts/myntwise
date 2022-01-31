@@ -168,7 +168,7 @@ def create_advice_for_user(advice_name,  advice_price, advice_description, advic
 # REPORTS 
 def get_transactions_count(user_id): 
     """ Get number of transactions for user """
-    return User_Transactions.query.filter_by(user_id=user_id).count()
+    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==True).count()
 
 def get_budgets_count(user_id): 
     """ Get number of budgets for user """
@@ -178,14 +178,13 @@ def get_categories_count(user_id):
     """ Get number of budgets by category for user """
     return Budget.query.filter_by(user_id=user_id).join(Categories, Budget.category_id==Categories.category_id).count()
 
-def get_total_transaction_amount(user_id): 
-    """Get total of prices of transactions- purchased"""
-    return db.session.query(Budget.budget_amount-functions.sum(User_Transactions.user_transactions_amount)).filter(Budget.user_id==user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.user_transactions_processed==True).group_by(Budget.budget_id).all()
+def get_total_budget_diff(user_id): 
+    """Get difference of budgets from transactions"""
+    return db.session.query(Budget.budget_amount-functions.sum(User_Transactions.user_transactions_amount), Budget.budget_name, functions.sum(User_Transactions.user_transactions_amount), functions.count(User_Transactions.user_transactions_processed==True)).filter(Budget.user_id==user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.user_transactions_processed==True).group_by(Budget.budget_id).all()
 
 def get_budget_amount(user_id): 
     """Get total of prices of transactions- purchased"""
-    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
-
+    return db.session.query(functions.sum(Budget.budget_amount)).filter(Budget.user_id==user_id).all()
 
 def get_total_transaction_saved(user_id): 
     """Get all transactions- not purchased"""
@@ -194,6 +193,11 @@ def get_total_transaction_saved(user_id):
 def get_total_transactions(user_id): 
     """Get all transactions info- not purchased"""
     return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+
+def get_total_saved_transactions_count(user_id): 
+    """Get saved transactions count"""
+    return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).count()
+
 
 def get_total_sum_transactions(user_id): 
     """Get all transactions info- not purchased"""
