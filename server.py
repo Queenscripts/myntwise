@@ -15,166 +15,18 @@ SESSION_TYPE = "filesystem"
 
 app.secret_key = "ABCSECRETDEF"
 
-
 # CLIENT ROUTES
 @app.route("/")
 def index(): 
+    query=request.args.get("query")
+    if query:
+        get_products(query).delay()
     return render_template("index.html")
 
 @app.route("/<path:path>", defaults={'path':''})
 def catch_all(path): 
     return render_template("index.html")
-    # return f"You want ${path}"
-
-# def homepage():
-#     """"Show homepage"""
-#     query=request.args.get("query")
-#     if query:
-#         get_products(query).delay()
-#     categories = crud.get_categories()
-#     advice = crud.get_advice()
-#     advice_prices=[]
-#     for price in advice: 
-#         advice_prices.append(price.advice_price)
-#     if session and session["user_email"]:
-#         user = crud.get_user_by_email(session["user_email"])
-#         budgets = crud.get_user_budgets(user.user_id)
-#         more_percentages =[]
-#         dict_budget = []
-   
-#         for budget in budgets:
-#             separated_list = []
-#             amount = budget.budget_amount
-#             budget_name = budget.budget_name
-#             dict_budget.append(budget_name)
-#             for price in advice: 
-#                 price = price.advice_price
-#                 percentage = round((price/amount)*100, 1)
-
-#                 separated_list.append(percentage)
-#                 print(price, amount, budget_name)
-#             more_percentages.append(separated_list)
-#         print(more_percentages)
-#         advice_prices=[]
-#         for price in advice: 
-#             advice_prices.append(price.advice_price)
-#         return render_template("home.html", prices=advice_prices, percentages = more_percentages, budgets= budgets, advice=advice, user=user, categories=categories)
-#     else:
-#         return render_template("public.html", prices=advice_prices, advice=advice, categories=categories)
-
-# @app.route("/price", methods=["GET"])
-# def return_custom_price_data(): 
-#     if request.method== "GET":
-#         categories = crud.get_categories()
-#         min_price=request.args.get('min')
-#         max_price=request.args.get('max')
-#         results = crud.filter_advice_by_price(min_price, max_price)
-#         if session and session["user_email"]:
-           
-#             user = crud.get_user_by_email(session["user_email"])
-#             budgets = crud.get_user_budgets(user.user_id)
-#             more_percentages =[]
-#             dict_budget = []
-#             for budget in budgets:
-#                 separated_list = []
-#                 amount = budget.budget_amount
-#                 budget_name = budget.budget_name
-#                 dict_budget.append(budget_name)
-#                 for price in results: 
-#                     price = price.advice_price
-#                     percentage = round((price/amount)*100, 1)
-
-#                     separated_list.append(percentage)
-#                     print(price, amount, budget_name)
-#                 more_percentages.append(separated_list)
-#             print(more_percentages)
-#             advice_prices=[]
-#             for price in results: 
-#                 advice_prices.append(price.advice_price)
-#             return render_template("home.html", advice=results, prices=advice_prices, percentages = more_percentages, budgets= budgets, user=user, categories=categories)
-#         else: 
-#             return render_template("home.html", advice=results, categories=categories)
-
-# @app.route("/category/<category_id>", methods=["GET"])    
-# def return_custom_category_data(category_id):
-#     if request.method== "GET":
-#         # advice = crud.get_advice()
-#         # category_id=request.args.get('category_id')
-#         categories = crud.get_categories()
-#         advice = crud.filter_advice_by_category(category_id)
-#         # min_price=request.args.get('min')
-#         # max_price=request.args.get('max')
-#         # results = crud.filter_advice_by_price(min_price, max_price)
-#         user = crud.get_user_by_email(session["user_email"])
-#         budgets = crud.get_user_budgets(user.user_id)
-#         more_percentages =[]
-#         dict_budget = []
-#         for budget in budgets:
-#             separated_list = []
-#             amount = budget.budget_amount
-#             budget_name = budget.budget_name
-#             dict_budget.append(budget_name)
-#             for price in advice: 
-#                 price = price.advice_price
-#                 percentage = round((price/amount)*100, 1)
-
-#                 separated_list.append(percentage)
-#                 print(price, amount, budget_name)
-#             more_percentages.append(separated_list)
-#         print(more_percentages)
-#         advice_prices=[]
-#         for price in advice: 
-#             advice_prices.append(price.advice_price)
-#         return render_template("home.html", advice=advice, prices=advice_prices, percentages = more_percentages, budgets= budgets, user=user, categories=categories)
-
-# @app.route("/about")
-# def about():
-#     return render_template("about.html")
-
-# @app.route("/test")
-# def test():
-#     return render_template("index.html")
-
-# @app.route("/dashboard")
-# def dashboard():
-#     """Show dashboard"""
-#     if session and session["user_email"]:
-#         user = crud.get_user_by_email(session["user_email"])
-#         users_advice = crud.get_advice_by_user_id(user.user_id)
-#         user_budgets = crud.get_user_budgets(user.user_id)
-#         budget_count = crud.get_budgets_count(user.user_id)
-#         transaction_count = crud.get_transactions_count(user.user_id)
-#         categories_count = crud.get_categories_count(user.user_id)
-#         categories = crud.get_categories()
-#         budgets = crud.get_user_budgets(user.user_id)
-#         more_percentages =[]
-#         transactions = crud.get_user_transactions(user.user_id)
-
-#         saved_transactions  = crud.get_total_transaction_saved(user.user_id)
-#         transactions_total= crud.get_total_sum_transactions(user.user_id)
-#         saved_total = crud.get_total_transaction_saved(user.user_id)
-#         print('SAVED', saved_total)
-#         more_percentages =[]
-#         dict_budget = []
-   
-#         for budget in budgets:
-#             separated_list = []
-#             amount = budget.budget_amount
-#             budget_name = budget.budget_name
-#             dict_budget.append(budget_name)
-#             for price in users_advice: 
-#                 price = price.advice_price
-#                 percentage = round((price/amount)*100, 1)
-
-#                 separated_list.append(percentage)
-#             more_percentages.append(separated_list)
-#         advice_prices=[]
-#         for price in users_advice: 
-#             advice_prices.append(price.advice_price)
-#         saved_info = crud.get_total_transactions(user.user_id)
-#         return render_template("dashboard.html", saved_info=saved_info, percentages = more_percentages, users_advice=users_advice, saved_transactions = saved_transactions, saved_total = saved_total, transactions_total=transactions_total,transactions = transactions,budgets=user_budgets, categories=categories, transaction_count=transaction_count, budget_count=budget_count, categories_count=categories_count, user=user)
-#     return render_template("dashboard.html")
-
+ 
 # # USER ROUTES
 @app.route("/signup", methods=["POST"])
 def signup():
@@ -233,42 +85,6 @@ def logout():
     return redirect("/")
 
 # # BUDGET ROUTE
-# @app.route("/budgets", methods=["GET", "POST", "PUT"])
-# def budgets():
-#     """Show budgets page"""
-    
-#     categories = crud.get_categories()
-    
-
-#     if request.method == "GET":
-#         if session and session["user_email"]:
-#             user = crud.get_user_by_email(session["user_email"])
-#             budgets = crud.get_user_budgets(user.user_id)
-#             transactions = crud.get_budgets_and_transactions(user.user_id)
-#             diff = crud.get_total_transaction_amount(user.user_id)
-#             # for budget in budgets:
-#             #     append_budget = {}
-#             #     # append_budget["category_id"],append_budget["budget_frequency"],append_budget["budget_name"],append_budget["budget_description"],append_budget["budget_amount"],append_budget["user_transactions_name"], append_budget["user_transactions_amount"], append_budget["user_transactions_date"]=budget[0].category_id,budget[0].budget_frequency,budget[0].budget_name, budget[0].budget_description, budget[0].budget_amount, budget[1].user_transactions_name, budget[1].user_transactions_amount, budget[1].user_transactions_date
-#             #     transactions.append(budget[1])
-#             # # print('B',user_budgets[0])
-#             return render_template("budget.html", diff =diff, transactions =transactions,  budgets = budgets, categories=categories)
-#         return render_template("budget.html", categories=categories)
-
-#     if request.method == "POST":
-#         user = crud.get_user_by_email(session["user_email"])
-#         budget_name = request.form.get("budget_name")
-#         budget_amount = request.form.get("budget_amount")
-#         budget_description = request.form.get("budget_description")
-#         budget_frequency = request.form.get("budget_frequency")
-#         category = crud.get_category(request.form.get("category"))
-        
-#         new_budget = crud.create_budget(budget_name,budget_amount,budget_description,budget_frequency, user.user_id, category.category_id)
-
-#         db.session.add(new_budget)
-#         db.session.commit()
-#         flash(f"New budget: {new_budget.budget_name}")
-#         return redirect("/budgets")
-
 @app.route("/budget/<id>", methods=["GET"])
 def delete_budget(id):
     """Route to delete budget"""
@@ -300,7 +116,7 @@ def transactions():
         return jsonify(parsed_transactions)
 
     if request.method == "POST":
-
+        
         request_data = request.get_json(force=True)
 
         print('DATA', request_data)
@@ -329,48 +145,15 @@ def delete_transaction(id):
     """Route to delete transaction"""
     crud.delete_transaction(id)
     db.session.commit()
-    return redirect("/dashboard")
-# # ADVICE ROUTE
+    return redirect("/dashboard#transactions")
 
-# @app.route("/advice", methods=["GET", "POST", "PUT", "DELETE"])
-# def advice():
-#     """Show budgeting advice via links of place to shop online by category"""
-#     advice = crud.get_advice()
-    
-#     query = request.args.get('query')
-#     # db_advice= crud.create_advice()
-#     if request.method == "GET": 
-#         price= request.args.get('price')
-#         print('PRICE', price)
-#         advice_by_price = crud.get_advice_by_price(price)
-#         print(advice_by_price)
-#         return tuple(advice_by_price)
-#     if request.method == "POST":
-#         budget_name = request.form.get("budget_name")
-#         budget_amount = request.form.get("budget_amount")
-#         budget_description = request.form.get("budget_description")
-#         budget_frequency = request.form.get("budget_frequency")
-#         user = crud.get_user_by_email(session["user_email"])
-#         category = crud.get_category(request.form.get("category"))
-        
-#         user = crud.get_user_by_email(session["user_email"])
-#         user_id = user.user_id
-
-#         new_budget = crud.create_budget(budget_name,budget_amount,budget_description,budget_frequency, user.user_id, category.category_id)
-
-#         db.session.add(new_budget)
-#         db.session.commit()
-#         flash(f"New budget: {new_budget.budget_name}")
-#         return redirect("/budgets")
+# ADVICE ROUTE
 
 # API ROUTES 
 @app.route("/api/all-users")
 def display_users():
     """Show users"""
     users = crud.get_users()
-    print(users, "USERS")
-    
-    # return jsonify(users)
     usery=[]
     for user in users:
         userz={} 
@@ -384,9 +167,45 @@ def display_users():
 @app.route("/api/advice")
 def advice():
     """Display advice"""
-    advice = crud.get_advice()
+    ROWS_PER_PAGE = 9
+    page = request.args.get('page')
     advice_list = []
-    for product in advice: 
+
+    if page:
+        advice = crud.get_advice().paginate(page=int(page), per_page=ROWS_PER_PAGE)
+        for product in advice.items: 
+            advice_item = {}
+            advice_item["advice_id"] = str(product.advice_id)
+            advice_item["advice_name"] = str(product.advice_name)
+            advice_item["advice_description"] = str(product.advice_description)
+            advice_item["advice_price"] = str(product.advice_price)
+            advice_item["advice_img"] = str(product.advice_img)
+            advice_item["advice_info_id"] = str(product.advice_info_id)
+            advice_list.append(advice_item)
+    else: 
+        advice = crud.get_advice().all()
+        for product in advice: 
+            advice_item = {}
+            advice_item["advice_id"] = str(product.advice_id)
+            advice_item["advice_name"] = str(product.advice_name)
+            advice_item["advice_description"] = str(product.advice_description)
+            advice_item["advice_price"] = str(product.advice_price)
+            advice_item["advice_img"] = str(product.advice_img)
+            advice_item["advice_info_id"] = str(product.advice_info_id)
+            advice_list.append(advice_item)
+    return jsonify(advice_list)
+
+@app.route("/api/advice/price")
+def advice_by_price():
+    """Display advice by price - paginated"""
+    ROWS_PER_PAGE = 9
+    page = request.args.get('page')
+    min_price = request.args.get('min')
+    max_price = request.args.get('max')
+    advice_list = []
+
+    advice = crud.filter_advice_by_price(min_price, max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
+    for product in advice.items: 
         advice_item = {}
         advice_item["advice_id"] = str(product.advice_id)
         advice_item["advice_name"] = str(product.advice_name)
@@ -395,15 +214,36 @@ def advice():
         advice_item["advice_img"] = str(product.advice_img)
         advice_item["advice_info_id"] = str(product.advice_info_id)
         advice_list.append(advice_item)
+    # else: 
+    #     advice = crud.get_advice().all()
+    #     for product in advice: 
+    #         advice_item = {}
+    #         advice_item["advice_id"] = str(product.advice_id)
+    #         advice_item["advice_name"] = str(product.advice_name)
+    #         advice_item["advice_description"] = str(product.advice_description)
+    #         advice_item["advice_price"] = str(product.advice_price)
+    #         advice_item["advice_img"] = str(product.advice_img)
+    #         advice_item["advice_info_id"] = str(product.advice_info_id)
+    #         advice_list.append(advice_item)
     return jsonify(advice_list)
 
 @app.route("/api/user/advice")
 def user_advice():
     """Display advice"""
+    ROWS_PER_PAGE = 9
+    page = request.args.get('page')
+    min_price = request.args.get('min')
+    max_price = request.args.get('max')
+
     user = crud.get_user_by_email(session["user_email"])
-    users_advice = crud.get_advice_by_user_id(user.user_id)
+    if min_price or max_price: 
+        users_advice = crud.filter_user_advice_by_price(user.user_id, min_price, max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
+    else:
+        users_advice = crud.get_advice_by_user_id(user.user_id).paginate(page=int(page), per_page=ROWS_PER_PAGE)
+    
     advice_list = []
-    for product in users_advice: 
+    advice_list.append(users_advice.total)
+    for product in users_advice.items: 
         advice_item = {}
         advice_item["advice_id"] = str(product.advice_id)
         advice_item["advice_name"] = str(product.advice_name)
@@ -414,26 +254,43 @@ def user_advice():
         advice_list.append(advice_item)
     return jsonify(advice_list)
 
-
-
-@app.route("/api/budgets")
+@app.route("/api/budgets", methods=["GET","POST"])
 def display_budgets():
     """Show budgets"""
-    if session and session["user_email"]:
-        user=crud.get_user_by_email(session["user_email"])
-        budgets = crud.get_user_budgets(user.user_id)
-        budgetlist=[]
-        for budget in budgets:
-            budget_item={} 
-            budget_item["user_id"]=int(budget.user_id)
-            budget_item["budget_name"]=str(budget.budget_name)
-            budget_item["budget_id"]=str(budget.budget_id)
-            budget_item["budget_description"]=str(budget.budget_description)
-            budget_item["budget_frequency"]=str(budget.budget_frequency)
-            budgetlist.append(budget_item)
-        return jsonify(budgetlist)
-    else:
-        return "budgets"
+    if request.method == "GET":
+        if session and session["user_email"]:
+            user = crud.get_user_by_email(session["user_email"])
+            # budgets = crud.get_user_budgets(user.user_id)
+            user_budgets_categories=crud.get_users_categories(user.user_id)
+            print(user_budgets_categories,"CAT")
+            budgetlist = []
+            for budget in user_budgets_categories:
+                print('B', budget)
+                budget_item={} 
+                budget_item["category"]=str(budget[1].category_name)
+                budget_item["category_id"]=int(budget[0].category_id)
+                budget_item["user_id"]=int(budget[0].user_id)
+                budget_item["budget_name"]=str(budget[0].budget_name)
+                budget_item["budget_id"]=str(budget[0].budget_id)
+                budget_item["budget_amount"]=str(budget[0].budget_amount)
+                budget_item["budget_description"]=str(budget[0].budget_description)
+                budget_item["budget_frequency"]=str(budget[0].budget_frequency)
+                budgetlist.append(budget_item)
+            return jsonify(budgetlist)
+    if request.method == "POST":
+        request_data = request.get_json(force=True)
+        user = crud.get_user_by_email(session["user_email"])
+        budget_name = request_data["budget_name"]
+        budget_amount = request_data["budget_amount"] 
+        budget_description = request_data["budget_description"] 
+        budget_frequency = request_data["budget_frequency"] 
+        category = crud.get_category(request_data["category"] )
+
+        new_budget = crud.create_budget(budget_name,budget_amount,budget_description,budget_frequency, user.user_id, category.category_id)
+
+        db.session.add(new_budget)
+        db.session.commit()
+        return redirect("/budgets")
 
 @app.route("/api/categories")
 def display_categories(): 
@@ -476,7 +333,8 @@ def display_reports():
     user_report["budget_differences"] = budget_differences
     user_report["transactions_sum"] = int(transactions_sum[0][0])
     user_report["cat_count"] = int(cat_count)
-    user_report["total_saved"] = int(total_saved[0][0])
+    # if total_saved:
+    #     user_report["total_saved"] = int(total_saved[0])
     user_report["total_transactions"] = int(total_transactions[0][0])
     user_report["total_saved_count"] = int(get_total_saved_transactions_count)
     print(get_total_budget_diff)

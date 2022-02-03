@@ -81,16 +81,16 @@ with open('data/advice.json') as a:
 advice_in_db = []
 
 for advice in advice_items: 
-    advice_name, advice_price, advice_description, advice_info_id, category_id, advice_img, user_id  = (
+    advice_name, advice_price, advice_description, advice_info_id, category_id, advice_img  = (
         advice['advice_name'],
         advice['advice_price'],
         advice['advice_description'],
         advice['advice_info_id'],
         advice['category_id'],
         advice['advice_img'],
-        advice['user_id'],
+        
     )
-    db_advice = crud.create_advice(advice_name, advice_price, advice_description, advice_info_id, category_id, advice_img, user_id)
+    db_advice = crud.create_advice(advice_name, advice_price, advice_description, advice_info_id, category_id, advice_img)
     advice_in_db.append(db_advice)
 
 
