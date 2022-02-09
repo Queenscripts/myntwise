@@ -36,6 +36,10 @@ def get_category(category_name):
     """ Get Category Info"""
     return Categories.query.filter_by(category_name=category_name).first()
 
+def get_category_by_id(category_id):
+    """ Get Category by ID"""
+    return db.session.query(Categories).get(category_id)
+
 def create_categories(category_name):
     """Get all categories"""
     category = Categories(
@@ -47,6 +51,10 @@ def create_categories(category_name):
     return category
 
 # CRUD FOR BUDGETS
+def get_budget_by_id(id):
+    """ Return budget by ID"""
+    return db.session.query(Budget).get(id)
+
 def create_budget(budget_name, budget_amount, budget_description, budget_frequency, user_id, category_id):
     budget = Budget(
         budget_name=budget_name, 
@@ -90,7 +98,11 @@ def get_user_transactions(user_id):
     """ Get all transactions for user """
     return db.session.query(User_Transactions, Budget, Categories).filter_by(user_id=user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.category_id==Categories.category_id).all()
 
-def create_user_transaction(user_transactions_name, user_transactions_amount, user_transactions_date, budget_id, category_id, user_id, user_transactions_processed): 
+def get_user_transaction(user_id, user_transactions_id):
+    """Get single transaction"""
+    return db.session.query(User_Transactions).filter_by(user_id=user_id).filter_by(user_transactions_id=user_transactions_id).first()
+
+def create_user_transaction(user_transactions_name, user_transactions_amount, user_transactions_date, budget_id, category_id, user_id, user_transactions_processed, img): 
     """ Create User Transaction """
     transaction = User_Transactions(
         user_transactions_name=user_transactions_name, 
@@ -99,7 +111,8 @@ def create_user_transaction(user_transactions_name, user_transactions_amount, us
         budget_id=budget_id, 
         category_id=category_id,
         user_id=user_id,
-        user_transactions_processed=user_transactions_processed
+        user_transactions_processed=user_transactions_processed,
+        img=img
     )
     db.session.add(transaction)
     db.session.commit()
@@ -185,6 +198,17 @@ def get_budgets_count(user_id):
     """ Get number of budgets for user """
     return Budget.query.filter_by(user_id=user_id).count()
 
+def filter_user_transactions_by_price(user_id,min_price, max_price):
+    """Filter advice by price"""
+    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_amount>=min_price).filter(User_Transactions.user_transactions_amount<=max_price).filter(User_Transactions.user_transactions_processed==True).all()
+
+def filter_user_transactions_by_date(user_id,start_date, end_date):
+    """Filter advice by price"""
+    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_date>=start_date).filter(User_Transactions.user_transactions_date<=end_date).filter(User_Transactions.user_transactions_processed==True).all()
+
+def get_saved_transactions(user_id):
+    """Get user's saved advice"""
+    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==False).all()
 def get_categories_count(user_id): 
     """ Get number of budgets by category for user """
     return Budget.query.filter_by(user_id=user_id).join(Categories, Budget.category_id==Categories.category_id).count()

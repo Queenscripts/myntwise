@@ -77,9 +77,10 @@ class User_Transactions(db.Model):
     budget_id = db.Column(db.Integer, db.ForeignKey(Budget.budget_id))
     category_id = db.Column(db.Integer, db.ForeignKey(Categories.category_id))
     user_id = db.Column(db.Integer, db.ForeignKey(User.user_id))
+    img= db.Column(db.String)
 
     def __repr__(self):
-        return f'<User user_transactions_processed={self.user_transactions_processed} user_transactions_id={self.user_id} user_transactions_name={self.user_transactions_name} user_transactions_amount={self.user_transactions_amount} user_transactions_date={self.user_transactions_date} budget_id={self.budget_id} category_id={self.category_id}'
+        return f'<User user_transactions_processed={self.user_transactions_processed} user_transactions_id={self.user_id} user_transactions_name={self.user_transactions_name} user_transactions_amount={self.user_transactions_amount} user_transactions_date={self.user_transactions_date} budget_id={self.budget_id} category_id={self.category_id} img={self.img}'
 
 
 
