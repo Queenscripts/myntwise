@@ -1,5 +1,5 @@
-from unicodedata import category
-from flask import Flask, render_template, jsonify, flash, session, redirect, request
+# from unicodedata import category
+from flask import Flask, render_template, jsonify, flash, session, redirect, request, url_for
 from model import connect_to_db, db
 from flask_debugtoolbar import DebugToolbarExtension
 import crud
@@ -8,12 +8,59 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from celerydb import create_celery_app
 import services
+from authlib.integrations.flask_client import OAuth
+import os
 
 app = Flask(__name__)
+
+oauth = OAuth(app)
 
 SESSION_TYPE = "filesystem"
 
 app.secret_key = "ABCSECRETDEF"
+
+@app.route('/google/')
+def google():
+
+    GOOGLE_CLIENT_ID = os.environ["GOOGLE_CLIENT_ID"]
+    GOOGLE_CLIENT_SECRET = os.environ["GOOGLE_CLIENT_SECRET"]
+
+    CONF_URL = 'https://accounts.google.com/.well-known/openid-configuration'
+    oauth.register(
+        name='google',
+        client_id=GOOGLE_CLIENT_ID,
+        client_secret=GOOGLE_CLIENT_SECRET,
+        server_metadata_url=CONF_URL,
+        client_kwargs={
+            'scope': 'openid email profile'
+        }
+    )
+
+    # Redirect to google_auth function
+    redirect_uri = url_for('google_auth', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+@app.route('/google/auth/')
+def google_auth():
+    token = oauth.google.authorize_access_token()
+    user = oauth.google.parse_id_token(token)
+    
+    if(user and user.get('at_hash')):
+        user_in_db = crud.get_user_by_email(user.email)
+
+        if user_in_db:
+            session["user_email"]=user_in_db.email
+            return redirect("/")
+        else:
+            hashed_pass = generate_password_hash(user.get('at_hash'))
+            # Save user image
+            new_user = crud.create_user(user.name,user.email, hashed_pass)
+
+            db.session.add(new_user)
+            db.session.commit()
+
+            session["user_email"]= new_user.email
+            return redirect('/')
 
 # CLIENT ROUTES
 @app.route("/")
@@ -53,8 +100,6 @@ def signup():
 
         else: 
             new_user = crud.create_user(name,email, hashed_pass)
-            # print(new_user, "NEW USER")
-
             db.session.add(new_user)
             db.session.commit()
 
@@ -97,11 +142,11 @@ def delete_budget(id):
 @app.route("/api/transactions", methods=["GET", "POST", "PUT", "DELETE"])
 def transactions():
     """Show & Handle User Transactions"""
-    # 
+    
     user = crud.get_user_by_email(session["user_email"])
     transactions = crud.get_user_transactions(user.user_id)
 
-    # 
+    
     categories = crud.get_categories()
 
     if request.method == "GET": 
@@ -131,19 +176,25 @@ def transactions():
         category = crud.get_category(request.form.get("category")) or crud.get_category(request_data["category"]) or None
         if budget == None or category == None:
             new_user_transaction = crud.create_user_transaction(user_transactions_name,user_transactions_amount, user_transactions_date, budget, category, user.user_id, user_transactions_processed,img)
-            print('NEW', new_user_transaction)
             db.session.add(new_user_transaction)
             db.session.commit()
         else:
             new_user_transaction = crud.create_user_transaction(user_transactions_name,user_transactions_amount, user_transactions_date,budget.budget_id,category.category_id, user.user_id, user_transactions_processed, img)
-            print('NEW', new_user_transaction)
 
-        # else: 
-            # 
             db.session.add(new_user_transaction)
             db.session.commit()
+            new_budget = crud.get_budget_by_id(new_user_transaction.budget_id)
+            new_category = crud.get_category_by_id(new_user_transaction.category_id)
         # flash(f"New user_transaction: {new_user_transaction.user_transactions_name}")
-        return redirect("/transactions")
+        return jsonify({
+            "transaction_id" : new_user_transaction.user_transactions_id,
+            "transaction_name":new_user_transaction.user_transactions_name,
+            "transaction_amount":new_user_transaction.user_transactions_amount,
+            "transaction_date": new_user_transaction.user_transactions_date,
+            "budget": new_budget.budget_name,
+            "category": new_category.category_name
+
+        })
 
     if request.method == "PUT":
         user = crud.get_user_by_email(session["user_email"])
@@ -252,19 +303,29 @@ def advice_by_price():
     min_price = request.args.get('min')
     max_price = request.args.get('max')
     advice_list = []
-
-    advice = crud.filter_advice_by_price(min_price, max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
-    advice_list.append(advice.total)
-
-    for product in advice.items: 
-        advice_item = {}
-        advice_item["advice_id"] = str(product.advice_id)
-        advice_item["advice_name"] = str(product.advice_name)
-        advice_item["advice_description"] = str(product.advice_description)
-        advice_item["advice_price"] = str(product.advice_price)
-        advice_item["advice_img"] = str(product.advice_img)
-        advice_item["advice_info_id"] = str(product.advice_info_id)
-        advice_list.append(advice_item)
+    if page:
+        advice = crud.filter_advice_by_price(min_price, max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
+        advice_list.append(advice.total)
+        for product in advice.items: 
+            advice_item = {}
+            advice_item["advice_id"] = str(product.advice_id)
+            advice_item["advice_name"] = str(product.advice_name)
+            advice_item["advice_description"] = str(product.advice_description)
+            advice_item["advice_price"] = str(product.advice_price)
+            advice_item["advice_img"] = str(product.advice_img)
+            advice_item["advice_info_id"] = str(product.advice_info_id)
+            advice_list.append(advice_item)
+    else:
+        advice = crud.filter_all_advice_by_price(min_price, max_price)
+        for product in advice: 
+            advice_item = {}
+            advice_item["advice_id"] = str(product.advice_id)
+            advice_item["advice_name"] = str(product.advice_name)
+            advice_item["advice_description"] = str(product.advice_description)
+            advice_item["advice_price"] = str(product.advice_price)
+            advice_item["advice_img"] = str(product.advice_img)
+            advice_item["advice_info_id"] = str(product.advice_info_id)
+            advice_list.append(advice_item)
     return jsonify(advice_list)
 
 @app.route("/api/user/advice")
@@ -325,10 +386,18 @@ def display_budgets():
         category = crud.get_category(request_data["category"] )
 
         new_budget = crud.create_budget(budget_name,budget_amount,budget_description,budget_frequency, user.user_id, category.category_id)
-
+        new_category = crud.get_category_by_id(new_budget.category_id)
         db.session.add(new_budget)
         db.session.commit()
-        return redirect("/budgets")
+        return jsonify({
+            "budget_id": new_budget.budget_id,
+            "budget_name":new_budget.budget_name,
+            "budget_description": new_budget.budget_description,
+            "budget_amount": new_budget.budget_name,
+            "budget_frequency": new_budget.budget_frequency,
+            "user_id": new_budget.user_id,
+            "category": new_category.category_name
+            })
 
 @app.route("/api/categories")
 def display_categories(): 
@@ -366,7 +435,6 @@ def display_reports():
     budgets_info = []
     for info in budgets:
         budget_info = {} 
-        print(info[0].budget_name)
         budget_info["name"]=info[0].budget_name
         budget_info["amount"]=info[0].budget_amount
         budgets_info.append(budget_info)
@@ -377,7 +445,6 @@ def display_reports():
             transaction_frequency = {}
             category = crud.get_category_by_id(transaction.category_id)
             budget = crud.get_budget_by_id(transaction.budget_id)
-            print('BUDHET', budget, transaction)
             transaction_frequency["user_transactions_id"],transaction_frequency["user_transactions_name"],transaction_frequency["transaction_amount"],transaction_frequency["transaction_date"],transaction_frequency["transaction_budget"],transaction_frequency["transaction_category"]=transaction.user_transactions_id, transaction.user_transactions_name, transaction.user_transactions_amount, transaction.user_transactions_date, budget.budget_name, category.category_name
             transactions_by_date.append(transaction_frequency)
     user_report["dated_transactions"] = transactions_by_date
@@ -403,20 +470,16 @@ def display_reports():
         budget_diff["total_transactions_amount"] = budget[2]
         budget_diff["total_transactions"] = budget[3]
         budget_differences.append(budget_diff)
-    # user_report["frequency"]
-    # print(frequency, 'freq')
-    # print(price)
+
     user_report["budget_differences"] = budget_differences
     user_report["transactions_sum"] = int(transactions_sum[0][0])
     user_report["cat_count"] = int(cat_count)
-    # if total_saved:
-    #     user_report["total_saved"] = int(total_saved[0])
     user_report["total_transactions"] = int(total_transactions[0][0])
     user_report["total_saved_count"] = int(get_total_saved_transactions_count)
     return jsonify(user_report)
 
 if __name__ == "__main__": 
-    app.debug = True 
+    app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     connect_to_db(app)
     DebugToolbarExtension(app)

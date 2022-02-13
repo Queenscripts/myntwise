@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@media (min-width: 1024px) {
+  table {
+    display: inline-table !important;
+  }
+
+  thead tr:not(:first-child) {
+    display: none;
+  }
+}
+
+td:not(:last-child) {
+  border-bottom: 0;
+}
+
+th:not(:last-child) {
+  border-bottom: 2px solid rgba(0, 0, 0, .1);
+}
+
+.login-btn {
+  justify-content: center;
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  box-shadow: 3px 3px 3px rgb(170, 170, 170);
+  border-radius: 15px;
+}
+.btn-text {
+  justify-content: center;
+  padding: 10px;
+  font-family: 'Poppins', sans-serif;
+  color: rgb(85, 85, 85);
+}
+
 .carousel-item{
   display: none;
 }

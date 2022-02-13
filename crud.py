@@ -138,6 +138,10 @@ def get_advice():
     """Get all advice"""
     return Advice.query
 
+def get_advice_by_name(advice_name):
+    """Get all advice"""
+    return Advice.query.filter_by(advice_name=advice_name).first()
+
 def get_advice_by_user_id(user_id):
     """Get all advice"""
     return Advice.query.filter_by(user_id=user_id)
@@ -149,6 +153,10 @@ def get_advice_by_id(advice_id):
 def filter_advice_by_price(min_price, max_price):
     """Filter advice by price"""
     return Advice.query.filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price)
+
+def filter_all_advice_by_price(min_price, max_price):
+    """Filter advice by price"""
+    return Advice.query.filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price).all()
 
 def filter_user_advice_by_price(user_id,min_price, max_price):
     """Filter advice by price"""
