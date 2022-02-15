@@ -488,9 +488,11 @@ if __name__ == "__main__":
     
     @celery.task()
     def get_products(query): 
-        user = crud.get_user_by_email(session["user_email"])
         product_instance=services.ProductFeed()
-        db.session.add(product_instance.fetch(query, user.user_id))
+        if session["user_email"]:
+            user = crud.get_user_by_email(session["user_email"])
+            db.session.add(product_instance.fetch(query, user.user_id))
+            db.session.commit()
         db.session.add(product_instance.generate(query))
         db.session.commit()
         
