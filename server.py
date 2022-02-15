@@ -491,6 +491,7 @@ if __name__ == "__main__":
         user = crud.get_user_by_email(session["user_email"])
         product_instance=services.ProductFeed()
         db.session.add(product_instance.fetch(query, user.user_id))
+        db.session.add(product_instance.generate(query))
         db.session.commit()
-        return render_template("home.html")
+        
     app.run(host="0.0.0.0")
