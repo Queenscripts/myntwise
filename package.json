@@ -1,0 +1,51 @@
+{
+  "devDependencies": {
+    "@babel/core": "^7.16.12",
+    "@babel/preset-react": "^7.16.7",
+    "@types/node": "^17.0.8",
+    "autoprefixer": "^10.4.2",
+    "babel-loader": "^8.2.3",
+    "postcss": "^8.4.5",
+    "tailwindcss": "^3.0.17",
+    "webpack": "^5.67.0",
+    "webpack-cli": "^4.9.2"
+  },
+  "name": "myntwise",
+  "description": "Build budgets, track transactions, and know where to purchase goods and services based on your financial availability and personal finance goals.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack ./src/index.js",
+    "build": "webpack --config webpack.config.cjs --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Queenscripts/myntwise.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Queenscripts/myntwise/issues"
+  },
+  "homepage": "https://github.com/Queenscripts/myntwise#readme",
+  "dependencies": {
+    "@headlessui/react": "^1.4.3",
+    "@heroicons/react": "^1.0.5",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^10.0.1",
+    "crypt": "^0.0.2",
+    "crypto": "^1.0.1",
+    "headlessui": "^0.0.0",
+    "heroicons": "^1.0.5",
+    "html-webpack-plugin": "^5.5.0",
+    "react": "^17.0.2",
+    "react-csv": "^2.2.2",
+    "react-dom": "^17.0.2",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
+    "react-router-hash-link": "^2.4.3"
+  }
+}

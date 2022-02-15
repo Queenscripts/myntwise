@@ -32,10 +32,10 @@ pip3 install -r requirements.txt
     * Walmart Affiliate Marketing API
 
 
-![](./app/home.png)
-![](./app/grid.png)
-![](./app/transactions.png)
-![](./app/reports.png)
+![ScreenShot](./app/home.png)
+![ScreenShot](./app/grid.png)
+![ScreenShot](./app/transactions.png)
+![ScreenShot](./app/reports.png)
 
 
 ## Contact
