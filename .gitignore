@@ -15,7 +15,6 @@ WM_IO_private_key.pem
 celerydb.py
 settings.py
 webpack.config.cjs
-src/
 .babelrc
 static/img/biteyes.jpg
 walmart-api.py

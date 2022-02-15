@@ -154,7 +154,8 @@ export default function Table(props) {
             img:null
           }),
         });
-        fetch(`${'http://localhost:5000'}?query=${user_transactions_name}`)
+        // ${'http://localhost:5000'}
+        fetch(`/?query=${user_transactions_name}`)
         if (!res.ok) {
           setOpen(true);
           setError(res.statusText);
