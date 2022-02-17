@@ -7,7 +7,7 @@ import json
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from celerydb import create_celery_app
-import services
+# import services
 from authlib.integrations.flask_client import OAuth
 import os
 
@@ -65,9 +65,9 @@ def google_auth():
 # CLIENT ROUTES
 @app.route("/")
 def index(): 
-    query=request.args.get("query")
-    if query:
-        get_products(query).delay()
+    # query=request.args.get("query")
+    # if query:
+    #     get_products(query).delay()
     return render_template("index.html")
 
 @app.route("/<path:path>", defaults={'path':''})
@@ -487,13 +487,13 @@ if __name__ == "__main__":
     celery=create_celery_app(app)
     
     @celery.task()
-    def get_products(query): 
-        product_instance=services.ProductFeed()
-        if session and session.get("user_email"):
-            user = crud.get_user_by_email(session["user_email"])
-            db.session.add(product_instance.fetch(query, user.user_id))
-            db.session.commit()
-        db.session.add(product_instance.generate(query))
-        db.session.commit()
+    # def get_products(query): 
+    #     product_instance=services.ProductFeed()
+    #     if session and session.get("user_email"):
+    #         user = crud.get_user_by_email(session["user_email"])
+    #         db.session.add(product_instance.fetch(query, user.user_id))
+    #         db.session.commit()
+    #     db.session.add(product_instance.generate(query))
+    #     db.session.commit()
         
     app.run(host="0.0.0.0")
