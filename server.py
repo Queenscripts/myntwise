@@ -65,9 +65,9 @@ def google_auth():
 # CLIENT ROUTES
 @app.route("/")
 def index(): 
-    # query=request.args.get("query")
-    # if query:
-    #     get_products(query).delay()
+    query=request.args.get("query")
+    if query:
+        get_products(query).delay()
     return render_template("index.html")
 
 @app.route("/<path:path>", defaults={'path':''})
@@ -486,7 +486,7 @@ if __name__ == "__main__":
     app.config.from_object(__name__)
     celery=create_celery_app(app)
     
-    @celery.task()
+    # @celery.task()
     # def get_products(query): 
     #     product_instance=services.ProductFeed()
     #     if session and session.get("user_email"):
