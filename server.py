@@ -11,7 +11,7 @@ import services
 from authlib.integrations.flask_client import OAuth
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="./static")
 
 oauth = OAuth(app)
 
