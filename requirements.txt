@@ -1,3 +1,4 @@
+Authlib==0.14.3
 amqp==5.0.9
 billiard==3.6.4.0
 blinker==1.4
