@@ -12,6 +12,7 @@ walmart_sig_gen.log
 WM_IO_my_rsa_key_pair
 WM_IO_public_key.pem
 WM_IO_private_key.pem
+celerydb.py
 settings.py
 .babelrc
 walmart-api.py
