@@ -13,7 +13,7 @@
   "name": "myntwise",
   "description": "Build budgets, track transactions, and know where to purchase goods and services based on your financial availability and personal finance goals.",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.js",
   "engines": {
     "node": "16.x"
   },
