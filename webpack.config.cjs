@@ -9,8 +9,8 @@ module.exports={
     },
     entry: path.resolve(__dirname, 'src/index.js'),
     output:{
-        filename: 'index.min.js',
-        path: path.resolve(__dirname, 'static/')
+        filename: 'index.js',
+        path: path.resolve(__dirname, '/static/')
     }, 
     resolve: {
         extensions: ['', '.js', '.jsx']
