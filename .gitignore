@@ -6,7 +6,7 @@ server/__pycache__
 secrets.sh
 .env
 node_modules/
-index.js
+./index.js
 services.py
 walmart_sig_gen.log
 WM_IO_my_rsa_key_pair
