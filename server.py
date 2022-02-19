@@ -481,7 +481,7 @@ def display_reports():
     return jsonify(user_report)
 
 if __name__ == "__main__": 
-    app.debug = False 
+    # app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     app.config.from_object(Config)
@@ -490,7 +490,7 @@ if __name__ == "__main__":
     DebugToolbarExtension(app)
 
     celery=create_celery_app(app)
-    
+    # app.run()
     @celery.task()
     def get_products(query): 
         product_instance=services.ProductFeed()
@@ -501,4 +501,4 @@ if __name__ == "__main__":
         db.session.add(product_instance.generate(query))
         db.session.commit()
         
-    app.run()
+    app.run(host='127.0.0.1',debug=False)
