@@ -250,6 +250,7 @@ def delete_transaction(id):
 @app.route("/api/all-users")
 def display_users():
     """Show users"""
+    db.session()
     users = crud.get_users()
     usery=[]
     for user in users:
