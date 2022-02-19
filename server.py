@@ -482,7 +482,7 @@ def display_reports():
 if __name__ == "__main__": 
     # app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     app.config.from_object(Config)
     db(app)
     connect_to_db(app)
