@@ -7,7 +7,7 @@ import json
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from celerydb import create_celery_app
-# import services
+import services
 from authlib.integrations.flask_client import OAuth
 import os
 
@@ -486,14 +486,14 @@ if __name__ == "__main__":
     app.config.from_object(__name__)
     celery=create_celery_app(app)
     
-    # @celery.task()
-    # def get_products(query): 
-    #     product_instance=services.ProductFeed()
-    #     if session and session.get("user_email"):
-    #         user = crud.get_user_by_email(session["user_email"])
-    #         db.session.add(product_instance.fetch(query, user.user_id))
-    #         db.session.commit()
-    #     db.session.add(product_instance.generate(query))
-    #     db.session.commit()
+    @celery.task()
+    def get_products(query): 
+        product_instance=services.ProductFeed()
+        if session and session.get("user_email"):
+            user = crud.get_user_by_email(session["user_email"])
+            db.session.add(product_instance.fetch(query, user.user_id))
+            db.session.commit()
+        db.session.add(product_instance.generate(query))
+        db.session.commit()
         
     app.run()

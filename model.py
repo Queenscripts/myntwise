@@ -1,5 +1,5 @@
 """SQLAlchemy Database Setup"""
-
+import os
 from xmlrpc.client import Boolean
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy import func
@@ -85,12 +85,14 @@ class User_Transactions(db.Model):
 
 
 def connect_to_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///dev_myntwise"
+    # "postgresql:///dev_myntwise"
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["POSTGRES_URI"]
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-
-    app.config["CELERY_BROKER_URL"] = "sqla+postgresql://queensform@localhost/dev_myntwise"
-    app.config["CELERY_BACKEND"] = "db+postgresql://localhost/dev_myntwise"
+    # "sqla+postgresql://queensform@localhost/dev_myntwise"
+    app.config["CELERY_BROKER_URL"] =  os.environ["POSTGRES_URI"]
+    # "db+postgresql://localhost/dev_myntwise"
+    app.config["CELERY_BACKEND"] =  os.environ["POSTGRES_URI"]
     db.app = app 
     db.init_app(app)
 
