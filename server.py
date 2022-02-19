@@ -3,7 +3,6 @@ from flask import Flask, render_template, jsonify, flash, session, redirect, req
 from model import connect_to_db, db
 from flask_debugtoolbar import DebugToolbarExtension
 import crud
-import json
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from celerydb import create_celery_app
