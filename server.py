@@ -483,9 +483,10 @@ def display_reports():
 if __name__ == "__main__": 
     app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
+    app.config.from_object(Config)
+
     connect_to_db(app)
     DebugToolbarExtension(app)
-    app.config.from_object(Config)
 
     celery=create_celery_app(app)
     
