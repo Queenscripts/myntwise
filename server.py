@@ -10,8 +10,10 @@ from celerydb import create_celery_app
 import services
 from authlib.integrations.flask_client import OAuth
 import os
+from config import Config
 
 app = Flask(__name__, static_folder="./static")
+app.config.from_object(Config)
 
 oauth = OAuth(app)
 
