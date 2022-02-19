@@ -5,7 +5,7 @@ from sqlalchemy.sql import functions
 # CRUD FOR USERS
 def get_users():
     """Get all users"""
-    return User.query.all()
+    return db.session.query(User).query.all()
 
 def create_user(name, email, password):
     """ Create User, Return User"""
