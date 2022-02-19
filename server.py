@@ -17,7 +17,7 @@ oauth = OAuth(app)
 
 SESSION_TYPE = "filesystem"
 
-# app.secret_key = "ABCSECRETDEF"
+app.secret_key = "ABCSECRETDEF"
 
 @app.route('/google/')
 def google():
