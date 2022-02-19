@@ -88,6 +88,7 @@ def connect_to_db(app):
     # "postgresql:///dev_myntwise"
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["POSTGRES_URI"]
     app.config["SQLALCHEMY_ECHO"] = True
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # "sqla+postgresql://queensform@localhost/dev_myntwise"
     app.config["CELERY_BROKER_URL"] =  os.environ["POSTGRES_URI"]
