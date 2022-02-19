@@ -4,8 +4,8 @@ import model
 import server 
 import json 
 
-os.system('dropdb dev_myntwise --if-exists')
-os.system('createdb dev_myntwise')
+os.system('dropdb myntwise --if-exists')
+os.system('createdb myntwise')
 
 model.connect_to_db(server.app)
 model.db.create_all()
