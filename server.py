@@ -13,7 +13,6 @@ import os
 from config import Config
 
 app = Flask(__name__, static_folder="./static")
-app.config.from_object(Config)
 
 oauth = OAuth(app)
 
@@ -485,7 +484,8 @@ if __name__ == "__main__":
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     connect_to_db(app)
     DebugToolbarExtension(app)
-    app.config.from_object(__name__)
+    app.config.from_object(Config)
+
     celery=create_celery_app(app)
     
     @celery.task()
