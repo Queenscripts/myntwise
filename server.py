@@ -274,7 +274,7 @@ def advice():
 
         # advice_list.append(len(advice.items))
 
-        for product in advice.items: 
+        for product in advice: 
             advice_item = {}
             advice_item["advice_id"] = str(product.advice_id)
             advice_item["advice_name"] = str(product.advice_name)
