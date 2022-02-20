@@ -2,8 +2,12 @@ from model import db, User, User_Transactions, Budget, Categories, Advice, conne
 # from server import budgets, transactions
 from sqlalchemy.sql import functions
 from sqlalchemy.ext.automap import automap_base
-from server import engine
+from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
+import os 
+
+engine = create_engine(os.environ["DATABASE_URL"])
+
 session = Session(engine)
 Base = automap_base()
 Base.prepare(engine, reflect=True)
