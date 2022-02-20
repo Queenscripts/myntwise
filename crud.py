@@ -15,8 +15,7 @@ Base.prepare(engine, reflect=True)
 # CRUD FOR USERS
 def get_users():
     """Get all users"""
-    users =  db.session.query(User).all()
-    print(users)
+  
     return session.query(User).all()
 
 def create_user(name, email, password):
