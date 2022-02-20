@@ -270,7 +270,7 @@ def advice():
 
     if page:
         advice = crud.get_advice().limit(ROWS_PER_PAGE).offset(page*ROWS_PER_PAGE)
-        advice_list.append(advice.total)
+        advice_list.append(advice)
 
         # advice_list.append(len(advice.items))
 
