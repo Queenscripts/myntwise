@@ -13,6 +13,7 @@ from config import Config
 from sqlalchemy import create_engine
 
 app = Flask(__name__, static_folder="./static")
+app.config.from_object(Config)
 
 oauth = OAuth(app)
 
@@ -484,7 +485,6 @@ if __name__ == "__main__":
     app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-    app.config.from_object(Config)
     db(app)
     engine = create_engine(connect_to_db(app))
 
