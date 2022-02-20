@@ -79,12 +79,14 @@ def index():
         if session and session.get("user_email"):
             user = crud.get_user_by_email(session["user_email"])
             shopping_advice = Table("advice", metadata, autoload=True)
-            engine.execute(shopping_advice.insert(),name=name, email=email, password=password)
+            engine.execute(shopping_advice.insert(),product_instance.fetch(query, user.user_id))
 
-            session.add(product_instance.fetch(query, user.user_id))
-            db.session.commit()
-        db.session.add(product_instance.generate(query))
-        db.session.commit()
+            # session.add(product_instance.fetch(query, user.user_id))
+            # db.session.commit()
+        shopping_advice = Table("advice", metadata, autoload=True)
+        engine.execute(shopping_advice.insert(),product_instance.generate(query))
+        # db.session.add(product_instance.generate(query))
+        # db.session.commit()
 
     query=request.args.get("query")
     if query:
