@@ -10,7 +10,6 @@ import services
 from authlib.integrations.flask_client import OAuth
 import os
 from config import Config
-from sqlalchemy import create_engine
 
 app = Flask(__name__, static_folder="./static")
 app.config.from_object(Config)
@@ -487,7 +486,6 @@ if __name__ == "__main__":
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     db(app)
     DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
-    engine = create_engine(DB_URI)
 
     db.init_app(app)
 
