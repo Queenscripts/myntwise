@@ -1,3 +1,4 @@
+import model
 from model import db, User, User_Transactions, Budget, Categories, Advice, connect_to_db
 # from server import budgets, transactions
 from sqlalchemy.sql import functions
@@ -146,7 +147,7 @@ def filter_by_date(user_id, start_date, end_date):
 # CRUD FOR ADVICE
 def get_advice():
     """Get all advice"""
-    return session.query(Advice)
+    return model.Advice.query
 
 def get_advice_by_name(advice_name):
     """Get all advice"""
