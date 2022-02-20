@@ -6,7 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 import os 
 
-engine = create_engine(os.environ["DATABASE_URL"])
+engine = create_engine(os.environ["POSTGRES_URI"])
 
 session = Session(engine)
 Base = automap_base()

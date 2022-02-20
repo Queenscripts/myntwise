@@ -86,13 +86,13 @@ class User_Transactions(db.Model):
 
 def connect_to_db(app):
     # "postgresql:///dev_myntwise"
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["POSTGRES_URI"]
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # "sqla+postgresql://queensform@localhost/dev_myntwise"
-    app.config["CELERY_BROKER_URL"] =  os.environ["DATABASE_URL"]
+    app.config["CELERY_BROKER_URL"] =  os.environ["POSTGRES_URI"]
     # "db+postgresql://localhost/dev_myntwise"
-    app.config["CELERY_BACKEND"] =  os.environ["DATABASE_URL"]
+    app.config["CELERY_BACKEND"] =  os.environ["POSTGRES_URI"]
     db.app = app 
     db.init_app(app)
 
