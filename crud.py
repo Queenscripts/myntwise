@@ -147,7 +147,7 @@ def filter_by_date(user_id, start_date, end_date):
 # CRUD FOR ADVICE
 def get_advice():
     """Get all advice"""
-    return model.Advice.query
+    return Advice.query
 
 def get_advice_by_name(advice_name):
     """Get all advice"""
