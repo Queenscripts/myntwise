@@ -3,11 +3,13 @@ from model import db, User, User_Transactions, Budget, Categories, Advice, conne
 # from server import budgets, transactions
 from sqlalchemy.sql import functions
 from sqlalchemy.ext.automap import automap_base
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,  Table, MetaData, Column, Integer, String
 from sqlalchemy.orm import Session
 import os 
 
 engine = create_engine(os.environ["POSTGRES_URI"])
+metadata = MetaData(engine)
+
 
 session = Session(engine)
 Base = automap_base()
@@ -20,9 +22,11 @@ def get_users():
 
 def create_user(name, email, password):
     """ Create User, Return User"""
-    user = User(name=name, email=email, password=password)
-    db.session.add(user)
-    db.session.commit()
+    user = Table("user", metadata, autoload=True)
+    engine.execute(user.insert(),name=name, email=email, password=password)
+    # user = User(name=name, email=email, password=password)
+    # db.session.add(user)
+    # db.session.commit()
 
     return user
 
