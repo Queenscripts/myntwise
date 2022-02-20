@@ -3,6 +3,7 @@ from flask import Flask, render_template, jsonify, flash, session, redirect, req
 from model import connect_to_db, db
 from flask_debugtoolbar import DebugToolbarExtension
 import crud
+from sqlalchemy import create_engine,  Table, MetaData, Column, Integer, String
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from celerydb import create_celery_app
@@ -11,12 +12,16 @@ from authlib.integrations.flask_client import OAuth
 import os
 from config import Config
 
+
 app = Flask(__name__, static_folder="./static")
 app.config.from_object(Config)
 
 oauth = OAuth(app)
 
 SESSION_TYPE = "filesystem"
+
+engine = create_engine(os.environ["POSTGRES_URI"])
+metadata = MetaData(engine)
 
 app.secret_key = "ABCSECRETDEF"
 
@@ -66,6 +71,21 @@ def google_auth():
 # CLIENT ROUTES
 @app.route("/")
 def index(): 
+    celery=create_celery_app(app)
+  
+    @celery.task()
+    def get_products(query): 
+        product_instance=services.ProductFeed()
+        if session and session.get("user_email"):
+            user = crud.get_user_by_email(session["user_email"])
+            shopping_advice = Table("advice", metadata, autoload=True)
+            engine.execute(shopping_advice.insert(),name=name, email=email, password=password)
+
+            session.add(product_instance.fetch(query, user.user_id))
+            db.session.commit()
+        db.session.add(product_instance.generate(query))
+        db.session.commit()
+
     query=request.args.get("query")
     if query:
         get_products(query).delay()
@@ -491,16 +511,6 @@ if __name__ == "__main__":
     connect_to_db(app)
     DebugToolbarExtension(app)
 
-    celery=create_celery_app(app)
-    # app.run()
-    @celery.task()
-    def get_products(query): 
-        product_instance=services.ProductFeed()
-        if session and session.get("user_email"):
-            user = crud.get_user_by_email(session["user_email"])
-            db.session.add(product_instance.fetch(query, user.user_id))
-            db.session.commit()
-        db.session.add(product_instance.generate(query))
-        db.session.commit()
+    
         
     app.run(host='127.0.0.1',debug=True)

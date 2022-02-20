@@ -16,10 +16,11 @@ from Crypto.Signature import PKCS1_v1_5
 from Crypto.Hash import SHA512 
 import base64
 from base64 import b64decode, b64encode 
-
+from sqlalchemy import create_engine,Table, MetaData
 
 # https://pypi.org/project/pycrypto/
-
+engine = create_engine(os.environ["POSTGRES_URI"])
+metadata = MetaData(engine)
 class ProductFeed: 
     def __init__(self):
         print("init")
@@ -93,9 +94,11 @@ class ProductFeed:
 
             for product in product_list[6][1]:
                 if product.get('name') and product.get('name') not in crud.get_advice():
-                    new_product_advice = crud.create_advice_for_user(product.get('name'), product.get('salePrice'), product.get('shortDescription'), product.get('itemId'), 3, product.get('largeImage'), user_id)
-                    db.session.add(new_product_advice)
-                    db.session.commit()
+                    # new_product_advice = crud.create_advice_for_user(product.get('name'), product.get('salePrice'), product.get('shortDescription'), product.get('itemId'), 3, product.get('largeImage'), user_id)
+                    new_advice = Table("advice", metadata, autoload=True)
+                    engine.execute(new_advice.insert(),advice_name=product.get('name'), advice_price=product.get('salePrice'), advice_description=product.get('shortDescription'), category_id=3, advice_info_id=product.get('itemId'), advice_img=product.get('largeImage'), user_id=user_id)
+                    # db.session.add(new_product_advice)
+                    # db.session.commit()
     
         return res
 
@@ -116,8 +119,10 @@ class ProductFeed:
 
             for product in product_list[6][1]:
                 if product.get('name') and product.get('name') not in crud.get_advice():
-                    new_product_advice = crud.create_advice(product.get('name'), product.get('salePrice'), product.get('shortDescription'), product.get('itemId'), 3, product.get('largeImage'))
-                    db.session.add(new_product_advice)
-                    db.session.commit()
+                    new_advice = Table("advice", metadata, autoload=True)
+                    engine.execute(new_advice.insert(),advice_name=product.get('name'), advice_price=product.get('salePrice'), advice_description=product.get('shortDescription'), category_id=3, advice_info_id=product.get('itemId'), advice_img=product.get('largeImage'))
+                    # new_product_advice = crud.create_advice(product.get('name'), product.get('salePrice'), product.get('shortDescription'), product.get('itemId'), 3, product.get('largeImage'))
+                    # db.session.add(new_product_advice)
+                    # db.session.commit()
     
         return res
