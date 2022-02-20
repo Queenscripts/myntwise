@@ -7,7 +7,7 @@ from celery import Celery
 from celery.signals import after_setup_logger 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-
+import os 
 # CELERY_TASK_LIST = [
 #     'app.tasks'
 # ]
@@ -18,7 +18,7 @@ def create_celery_app(_app=None):
     """
     from model import db
 
-    celery = Celery(_app.import_name, backend=_app.config["CELERY_BACKEND"], broker=_app.config["CELERY_BROKER_URL"] )
+    celery = Celery(_app.import_name, backend=os.environ["POSTGRES_URI"], broker=os.environ["POSTGRES_URI"] )
     celery.conf.update(_app.config)
     class ContextTask(celery.Task): 
         def __call__(self, *args: any, **kwargs):
