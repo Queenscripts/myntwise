@@ -32,7 +32,7 @@ def get_user(id):
 
 def get_user_by_email(email): 
     """ Get user by email """
-    return User.query.filter_by(email=email).first()
+    return session.query(User).filter_by(email=email).first()
 
 # CRUD FOR CATEGORIES
 def get_categories():

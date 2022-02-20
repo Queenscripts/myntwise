@@ -61,7 +61,7 @@ def google_auth():
             db.session.commit()
 
             session["user_email"]= new_user.email
-            return redirect('/')
+            return redirect('/dashboard')
 
 # CLIENT ROUTES
 @app.route("/")
@@ -268,21 +268,21 @@ def advice():
     page = request.args.get('page')
     advice_list = []
 
-    if page:
-        advice = crud.get_advice().all()
-        advice_list.append(len(advice))
+    # if page:
+    #     advice = crud.get_advice().all()
+    #     advice_list.append(len(advice))
 
-        # advice_list.append(len(advice.items))
-        for product in advice: 
-            advice_item = {}
-            advice_item["advice_id"] = str(product.advice_id)
-            advice_item["advice_name"] = str(product.advice_name)
-            advice_item["advice_description"] = str(product.advice_description)
-            advice_item["advice_price"] = str(product.advice_price)
-            advice_item["advice_img"] = str(product.advice_img)
-            advice_item["advice_info_id"] = str(product.advice_info_id)
-            advice_list.append(advice_item)
-    else: 
+    #     # advice_list.append(len(advice.items))
+    #     for product in advice: 
+    #         advice_item = {}
+    #         advice_item["advice_id"] = str(product.advice_id)
+    #         advice_item["advice_name"] = str(product.advice_name)
+    #         advice_item["advice_description"] = str(product.advice_description)
+    #         advice_item["advice_price"] = str(product.advice_price)
+    #         advice_item["advice_img"] = str(product.advice_img)
+    #         advice_item["advice_info_id"] = str(product.advice_info_id)
+    #         advice_list.append(advice_item)
+    # else: 
         advice = crud.get_advice().all()
         advice_list.append(len(advice))
         for product in advice: 
