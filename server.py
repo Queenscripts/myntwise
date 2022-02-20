@@ -269,11 +269,10 @@ def advice():
     advice_list = []
 
     if page:
-        advice = crud.get_advice().limit(ROWS_PER_PAGE).offset(page*ROWS_PER_PAGE)
-        advice_list.append(advice)
+        advice = crud.get_advice().all()
+        advice_list.append(len(advice))
 
         # advice_list.append(len(advice.items))
-
         for product in advice: 
             advice_item = {}
             advice_item["advice_id"] = str(product.advice_id)
@@ -295,6 +294,7 @@ def advice():
             advice_item["advice_img"] = str(product.advice_img)
             advice_item["advice_info_id"] = str(product.advice_info_id)
             advice_list.append(advice_item)
+    print('ADVICE$', advice_list)
     return jsonify(advice_list)
 
 @app.route("/api/advice/price")
@@ -484,7 +484,6 @@ if __name__ == "__main__":
     app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-    db(app)
     DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
 
     db.init_app(app)
@@ -504,4 +503,4 @@ if __name__ == "__main__":
         db.session.add(product_instance.generate(query))
         db.session.commit()
         
-    app.run(host='127.0.0.1',debug=False)
+    app.run(host='127.0.0.1',debug=True)
