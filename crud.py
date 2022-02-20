@@ -1,13 +1,19 @@
 from model import db, User, User_Transactions, Budget, Categories, Advice, connect_to_db
 # from server import budgets, transactions
 from sqlalchemy.sql import functions
+from sqlalchemy.ext.automap import automap_base
+from server import engine
+from sqlalchemy.orm import Session
+session = Session(engine)
+Base = automap_base()
+Base.prepare(engine, reflect=True)
 
 # CRUD FOR USERS
 def get_users():
     """Get all users"""
-    users =  db.session.query(User).query.all()
+    users =  db.session.query(User).all()
     print(users)
-    return db.session.query(User).query.all()
+    return session.query(User).all()
 
 def create_user(name, email, password):
     """ Create User, Return User"""

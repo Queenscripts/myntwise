@@ -486,7 +486,8 @@ if __name__ == "__main__":
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     db(app)
-    engine = create_engine(connect_to_db(app))
+    DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
+    engine = create_engine(DB_URI)
 
     db.init_app(app)
 
