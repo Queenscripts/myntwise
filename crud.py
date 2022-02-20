@@ -28,7 +28,7 @@ def create_user(name, email, password):
 
 def get_user(id): 
     """ Get user by id """
-    return User.get(id)
+    return session.query(User).get(id)
 
 def get_user_by_email(email): 
     """ Get user by email """
@@ -37,11 +37,11 @@ def get_user_by_email(email):
 # CRUD FOR CATEGORIES
 def get_categories():
     """Get all categories"""
-    return Categories.query.all()
+    return session.query(Categories).query.all()
 
 def get_users_categories(user_id):
     """Get categories ids"""
-    return db.session.query(Budget,Categories).filter(Budget.user_id==user_id).filter(Budget.category_id==Categories.category_id).all()
+    return session.query(Budget,Categories).filter(Budget.user_id==user_id).filter(Budget.category_id==Categories.category_id).all()
 
 def get_category(category_name):
     """ Get Category Info"""
