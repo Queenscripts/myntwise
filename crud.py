@@ -53,7 +53,7 @@ def get_category(category_name):
 
 def get_category_by_id(category_id):
     """ Get Category by ID"""
-    return session.query(Categories).get(category_id).first()
+    return session.query(Categories).get(category_id)
 
 def create_categories(category_name):
     """Get all categories"""
