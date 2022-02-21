@@ -41,7 +41,7 @@ def get_user_by_email(email):
 # CRUD FOR CATEGORIES
 def get_categories():
     """Get all categories"""
-    return session.query(Categories).query.all()
+    return session.query(Categories).all()
 
 def get_users_categories(user_id):
     """Get categories ids"""
