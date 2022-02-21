@@ -1,3 +1,4 @@
+import 'regenerator-runtime/runtime'
 import React from "react";
 import Modal from "./Modal"
 
@@ -105,7 +106,6 @@ export default function Table(props) {
       user_transactions_name: "",
       user_transactions_amount: "",
       user_transactions_date: "",
-      user_transactions_date: "",
     })
     const transactionsFetch = async () => {
       const url = "/api/transactions";
@@ -166,7 +166,6 @@ export default function Table(props) {
       };
       newTransaction().then(
         async (data) => {
-        // const categories = await categoryFetch();
         
         setState({
           categories,
@@ -235,48 +234,6 @@ export default function Table(props) {
           category: null,
           user_transactions_date: null,
         })
-      });
-    } catch (e) {
-      throw new Error(`${e}`);
-    }
-  };
-
-  const deleteTransaction = (e) => {
-    
-    try {
-      e.preventDefault();
-      const newTransaction = async () => {
-        const url = "/api/transactions";
-        const res = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_transactions_name,
-            user_transactions_amount,
-            user_transactions_date,
-            user_transactions_processed,
-            budget,
-            category,
-          }),
-        });
-        fetch(`${'http://localhost:5000'}?query=${user_transactions_name}`)
-        if (!res.ok) {
-          setOpen(true);
-          setError(res.statusText);
-          throw new Error(`${res.status}, ${res.statusText}`);
-        } else {
-          const budgets = await res.json();
-          const categories = await categoryFetch();
-          setState({
-            categories,
-            budgets,
-          });
-        }
-      };
-      newTransaction().then(() => {
-        
       });
     } catch (e) {
       throw new Error(`${e}`);

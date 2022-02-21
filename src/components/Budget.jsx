@@ -227,7 +227,7 @@ function BudgetForm(props) {
   );
 }
 
-function Budget(props) {
+export default function Budget(props) {
   const [categories, setCategories] = React.useState(null);
   const [budgets, setBudgets] = React.useState(null);
   const [budgetState, setBudgetState] = React.useState(null)
@@ -457,5 +457,3 @@ function Budget(props) {
     </div>
   );
 }
-
-export default Budget;

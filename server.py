@@ -11,6 +11,8 @@ import services
 from authlib.integrations.flask_client import OAuth
 import os
 from config import Config
+from model import db, User, User_Transactions, Budget, Categories, Advice, connect_to_db
+from sqlalchemy.orm import Session
 
 
 app = Flask(__name__, static_folder="./static")
@@ -122,12 +124,12 @@ def signup():
             flash("Must provide password")
 
         else: 
-            new_user = crud.create_user(name,email, hashed_pass)
-            db.session.add(new_user)
-            db.session.commit()
+            new_user = Table("users", metadata, autoload=True)
+            engine.execute(new_user.insert(), name=name, email=email, password=hashed_pass)
+            user = Session(engine).query(User).filter_by(email=email).first()
 
-        session["user_email"]= new_user.email
-        return redirect("/")
+        session["user_email"]= user.email
+        return redirect("/dashboard")
 
 @app.route("/login", methods=["POST"])
 def login(): 
@@ -482,10 +484,12 @@ def display_reports():
             transaction_price_range["user_transactions_id"],transaction_price_range["user_transactions_name"],transaction_price_range["transaction_amount"],transaction_price_range["transaction_date"],transaction_price_range["transaction_budget"],transaction_price_range["transaction_category"]=transaction.user_transactions_id, transaction.user_transactions_name, transaction.user_transactions_amount, transaction.user_transactions_date, budget.budget_name, category.category_name
             transactions_by_price.append(transaction_price_range)
     user_report["price_ranged_transactions"] = transactions_by_price
-
-    user_report["total_budget_amount"] = int(budget_amount[0][0])
+    print('BUDGET', budget_amount)
+    if budget_amount[0][0]:
+        user_report["total_budget_amount"] = int(budget_amount[0][0])
     user_report["budget_count"] = int(budget_count)
-    user_report["transactions_count"] = int(transactions_count)
+    if transactions_count:
+        user_report["transactions_count"] = int(transactions_count)
     budget_differences=[]
     for budget in get_total_budget_diff: 
         budget_diff={}
@@ -496,14 +500,18 @@ def display_reports():
         budget_differences.append(budget_diff)
 
     user_report["budget_differences"] = budget_differences
-    user_report["transactions_sum"] = int(transactions_sum[0][0])
-    user_report["cat_count"] = int(cat_count)
-    user_report["total_transactions"] = int(total_transactions[0][0])
-    user_report["total_saved_count"] = int(get_total_saved_transactions_count)
+    if transactions_sum[0][0]:
+        user_report["transactions_sum"] = int(transactions_sum[0][0])
+    if cat_count: 
+        user_report["cat_count"] = int(cat_count)
+    if total_transactions[0][0]:
+        user_report["total_transactions"] = int(total_transactions[0][0])
+    if get_total_saved_transactions_count:
+        user_report["total_saved_count"] = int(get_total_saved_transactions_count)
     return jsonify(user_report)
 
 if __name__ == "__main__": 
-    app.debug = False 
+    app.debug = True 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     DB_URI = app.config['SQLALCHEMY_DATABASE_URI']

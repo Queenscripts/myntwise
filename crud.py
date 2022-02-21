@@ -22,7 +22,7 @@ def get_users():
 
 def create_user(name, email, password):
     """ Create User, Return User"""
-    user = Table("user", metadata, autoload=True)
+    user = Table("users", metadata, autoload=True)
     engine.execute(user.insert(),name=name, email=email, password=password)
     # user = User(name=name, email=email, password=password)
     # db.session.add(user)
@@ -49,21 +49,20 @@ def get_users_categories(user_id):
 
 def get_category(category_name):
     """ Get Category Info"""
-    return Categories.query.filter_by(category_name=category_name).first()
+    return session.query(Categories).filter_by(category_name=category_name).first()
 
 def get_category_by_id(category_id):
     """ Get Category by ID"""
-    return db.session.query(Categories).get(category_id)
+    return session.query(Categories).get(category_id).first()
 
 def create_categories(category_name):
     """Get all categories"""
-    category = Categories(
-        category_name=category_name
-    )
-    db.session.add(category)
-    db.session.commit()
-
-    return category
+    category = Table("categories", metadata, autoload=True)
+    engine.execute(category.insert(), category_name=category_name)
+    new_category = Session(engine).query(Categories).filter_by(category_name=category_name).first()
+    # db.session.add(category)
+    # db.session.commit()
+    return new_category
 
 # CRUD FOR BUDGETS
 def get_budget_by_id(id):
@@ -158,20 +157,23 @@ def get_advice_by_name(advice_name):
     return Advice.query.filter_by(advice_name=advice_name).first()
 
 def get_advice_by_user_id(user_id):
-    """Get all advice"""
-    return Advice.query.filter_by(user_id=user_id)
+    """Get all advice""" 
+    # Advice.query.filter_by(user_id=user_id)
+    return session.query(Advice).filter_by(user_id=user_id)
 
 def get_advice_by_id(advice_id): 
     """Get advice by ID"""
-    return Advice.get(advice_id)
+    #  Advice.get(advice_id)
+    return session.query(Advice).get(advice_id)
 
 def filter_advice_by_price(min_price, max_price):
     """Filter advice by price"""
-    return Advice.query.filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price)
+    # Advice.query.filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price)
+    return session.query(Advice).filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price)
 
 def filter_all_advice_by_price(min_price, max_price):
     """Filter advice by price"""
-    return Advice.query.filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price).all()
+    return session.query(Advice).filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price).all()
 
 def filter_user_advice_by_price(user_id,min_price, max_price):
     """Filter advice by price"""
@@ -215,52 +217,62 @@ def create_advice_for_user(advice_name,  advice_price, advice_description, advic
 # REPORTS 
 def get_transactions_count(user_id): 
     """ Get number of transactions for user """
-    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==True).count()
-
+    #  User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==True).count()
+    return session.query(User_Transactions).filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==True).count()
 def get_budgets_count(user_id): 
     """ Get number of budgets for user """
-    return Budget.query.filter_by(user_id=user_id).count()
+    # return Budget.query.filter_by(user_id=user_id).count()
+    return session.query(Budget).filter_by(user_id=user_id).count()
 
 def filter_user_transactions_by_price(user_id,min_price, max_price):
     """Filter advice by price"""
-    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_amount>=min_price).filter(User_Transactions.user_transactions_amount<=max_price).filter(User_Transactions.user_transactions_processed==True).all()
+    # return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_amount>=min_price).filter(User_Transactions.user_transactions_amount<=max_price).filter(User_Transactions.user_transactions_processed==True).all()
+    return session.query(User_Transactions).query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_amount>=min_price).filter(User_Transactions.user_transactions_amount<=max_price).filter(User_Transactions.user_transactions_processed==True).all()
 
 def filter_user_transactions_by_date(user_id,start_date, end_date):
     """Filter advice by price"""
-    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_date>=start_date).filter(User_Transactions.user_transactions_date<=end_date).filter(User_Transactions.user_transactions_processed==True).all()
+    # return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_date>=start_date).filter(User_Transactions.user_transactions_date<=end_date).filter(User_Transactions.user_transactions_processed==True).all()
+    return session.query(User_Transactions).filter_by(user_id=user_id).filter(User_Transactions.user_transactions_date>=start_date).filter(User_Transactions.user_transactions_date<=end_date).filter(User_Transactions.user_transactions_processed==True).all()
 
 def get_saved_transactions(user_id):
     """Get user's saved advice"""
-    return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==False).all()
+    # return User_Transactions.query.filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==False).all()
+    return session.query(User_Transactions).filter_by(user_id=user_id).filter(User_Transactions.user_transactions_processed==False).all()
+
 def get_categories_count(user_id): 
     """ Get number of budgets by category for user """
-    return Budget.query.filter_by(user_id=user_id).join(Categories, Budget.category_id==Categories.category_id).count()
+    # return Budget.query.filter_by(user_id=user_id).join(Categories, Budget.category_id==Categories.category_id).count()
+    return session.query(Budget).filter_by(user_id=user_id).join(Categories, Budget.category_id==Categories.category_id).count()
 
 def get_total_budget_diff(user_id): 
     """Get difference of budgets from transactions"""
-    return db.session.query(Budget.budget_amount-functions.sum(User_Transactions.user_transactions_amount), Budget.budget_name, functions.sum(User_Transactions.user_transactions_amount), functions.count(User_Transactions.user_transactions_processed==True)).filter(Budget.user_id==user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.user_transactions_processed==True).group_by(Budget.budget_id).all()
+    # return db.session.query(Budget.budget_amount-functions.sum(User_Transactions.user_transactions_amount), Budget.budget_name, functions.sum(User_Transactions.user_transactions_amount), functions.count(User_Transactions.user_transactions_processed==True)).filter(Budget.user_id==user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.user_transactions_processed==True).group_by(Budget.budget_id).all()
+    return session.query(Budget.budget_amount-functions.sum(User_Transactions.user_transactions_amount), Budget.budget_name, functions.sum(User_Transactions.user_transactions_amount), functions.count(User_Transactions.user_transactions_processed==True)).filter(Budget.user_id==user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.user_transactions_processed==True).group_by(Budget.budget_id).all()
 
 def get_budget_amount(user_id): 
     """Get total of prices of transactions- purchased"""
-    return db.session.query(functions.sum(Budget.budget_amount)).filter(Budget.user_id==user_id).all()
-
+    # return db.session.query(functions.sum(Budget.budget_amount)).filter(Budget.user_id==user_id).all()
+    return session.query(functions.sum(Budget.budget_amount)).filter(Budget.user_id==user_id).all()
+    
 def get_total_transaction_saved(user_id): 
     """Get all transactions- not purchased"""
-    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+    # return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+    return session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
 
 def get_total_transactions(user_id): 
     """Get all transactions info- not purchased"""
-    return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
-
+    # return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+    return session.query(User_Transactions).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).all()
+    
 def get_total_saved_transactions_count(user_id): 
     """Get saved transactions count"""
-    return User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).count()
-
+    # User_Transactions.query.filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).count()
+    return session.query(User_Transactions).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==False).count()
 
 def get_total_sum_transactions(user_id): 
     """Get all transactions info- not purchased"""
-    return db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
-
+    # db.session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
+    return session.query(functions.sum(User_Transactions.user_transactions_amount)).filter(User_Transactions.user_id==user_id).filter(User_Transactions.user_transactions_processed==True).all()
 
 
 if __name__ == "__main__":

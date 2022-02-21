@@ -21,7 +21,6 @@ const LineChart = React.forwardRef((props) => {
     
    
       React.useEffect(() => {
-        console.log('DATA', props.data)
       let ctx = chartRef.current.getContext("2d");
       const myChart = new Chart(ctx, {
         type: "line",
