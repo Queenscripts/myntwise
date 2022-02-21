@@ -70,18 +70,27 @@ def get_budget_by_id(id):
     return db.session.query(Budget).get(id)
 
 def create_budget(budget_name, budget_amount, budget_description, budget_frequency, user_id, category_id):
-    budget = Budget(
+    budget = Table("budgets", metadata, autoload=True)
+    engine.execute(budget.insert(), 
         budget_name=budget_name, 
         budget_amount=budget_amount, 
         budget_description=budget_description, 
         budget_frequency=budget_frequency, 
         user_id=user_id,
-        category_id=category_id
-    )
-    db.session.add(budget)
-    db.session.commit()
+        category_id=category_id)
+    new_budget = Session(engine).query(Budget).filter_by(budget_name=budget_name).first()
+    #  Budget(
+    #     budget_name=budget_name, 
+    #     budget_amount=budget_amount, 
+    #     budget_description=budget_description, 
+    #     budget_frequency=budget_frequency, 
+    #     user_id=user_id,
+    #     category_id=category_id
+    # )
+    # db.session.add(budget)
+    # db.session.commit()
 
-    return budget
+    return new_budget
 
 def get_budgets_and_transactions(user_id):
     """Get all budgets"""
