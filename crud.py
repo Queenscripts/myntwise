@@ -67,7 +67,7 @@ def create_categories(category_name):
 # CRUD FOR BUDGETS
 def get_budget_by_id(id):
     """ Return budget by ID"""
-    return db.session.query(Budget).get(id)
+    return session.query(Budget).get(id)
 
 def create_budget(budget_name, budget_amount, budget_description, budget_frequency, user_id, category_id):
     budget = Table("budgets", metadata, autoload=True)
@@ -146,19 +146,18 @@ def create_user_transaction(user_transactions_name, user_transactions_amount, us
     
 def update_user_transaction(id,entity):
     """Update Transaction"""
-    transaction = User_Transactions.query.get(id)
+    transaction = session.query(User_Transactions).get(id)
     transaction.entity.name = entity.vall
     db.session.commit()
 
 def delete_transaction(id):
     """Delete Transaction"""
-    User_Transactions.query.filter_by(user_transactions_id=id).delete()
-    db.session.commit()
+    session.query(User_Transactions).filter_by(user_transactions_id=id).delete()
     return f"Deleted transaction id: {id}"
 
 def filter_by_date(user_id, start_date, end_date): 
     """Get all transactions by date range"""
-    return User_Transactions.query.filter(User_Transactions.user_transactions_date>=start_date).filter(User_Transactions.user_transactions_date<=end_date)
+    return session.query(User_Transactions).filter(User_Transactions.user_transactions_date>=start_date).filter(User_Transactions.user_transactions_date<=end_date)
 # CRUD FOR ADVICE
 def get_advice():
     """Get all advice"""
@@ -166,7 +165,7 @@ def get_advice():
 
 def get_advice_by_name(advice_name):
     """Get all advice"""
-    return Advice.query.filter_by(advice_name=advice_name).first()
+    return session.query(Advice).filter_by(advice_name=advice_name).first()
 
 def get_advice_by_user_id(user_id):
     """Get all advice""" 
@@ -189,40 +188,48 @@ def filter_all_advice_by_price(min_price, max_price):
 
 def filter_user_advice_by_price(user_id,min_price, max_price):
     """Filter advice by price"""
-    return Advice.query.filter_by(user_id=user_id).filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price)
+    return session.query(Advice).filter_by(user_id=user_id).filter(Advice.advice_price>min_price).filter(Advice.advice_price<max_price)
 
 def filter_advice_by_category(category_id):
     """Filter advice by price"""
-    return Advice.query.filter(Advice.category_id==category_id).all()
+    return session.query(Advice).filter(Advice.category_id==category_id).all()
 
 def create_advice(advice_name,  advice_price, advice_description, advice_info_id, category_id, advice_img):
     """Create advice"""
-    advice = Advice(
-        advice_name=advice_name, 
+    # advice = Advice(
+    #     advice_name=advice_name, 
+    #     advice_price=advice_price, 
+    #     advice_description= advice_description, 
+    #     advice_info_id=advice_info_id,
+    #     category_id=category_id,
+    #     advice_img=advice_img
+    # )
+    new_advice = Table("advice", metadata, autoload=True)
+    engine.execute(new_advice.insert(),advice_name=advice_name, 
         advice_price=advice_price, 
         advice_description= advice_description, 
         advice_info_id=advice_info_id,
         category_id=category_id,
-        advice_img=advice_img
-    )
-    db.session.add(advice)
-    db.session.commit()
+        advice_img=advice_img)
+    advice = Session(engine).query(Advice).filter_by(advice_name=advice_name).first()
+    # db.session.add(advice)
+    # db.session.commit()
 
     return advice
 
 def create_advice_for_user(advice_name,  advice_price, advice_description, advice_info_id, category_id, advice_img,user_id):
     """Create advice"""
-    advice = Advice(
-        advice_name=advice_name, 
+    new_advice = Table("advice", metadata, autoload=True)
+    engine.execute(
+        new_advice.insert(),advice_name=advice_name, 
         advice_price=advice_price, 
         advice_description= advice_description, 
         advice_info_id=advice_info_id,
         category_id=category_id,
         advice_img=advice_img,
         user_id=user_id
-    )
-    db.session.add(advice)
-    db.session.commit()
+        )
+    advice = Session(engine).query(Advice).filter_by(advice_name=advice_name).first()
 
     return advice
 
