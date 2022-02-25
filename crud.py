@@ -119,11 +119,11 @@ def update_budget(id,entity):
 # CRUD FOR USER TRANSACTIONS
 def get_user_transactions(user_id): 
     """ Get all transactions for user """
-    return db.session.query(User_Transactions, Budget, Categories).filter_by(user_id=user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.category_id==Categories.category_id).all()
+    return session.query(User_Transactions, Budget, Categories).filter_by(user_id=user_id).filter(User_Transactions.budget_id==Budget.budget_id).filter(User_Transactions.category_id==Categories.category_id).all()
 
 def get_user_transaction(user_id, user_transactions_id):
     """Get single transaction"""
-    return db.session.query(User_Transactions).filter_by(user_id=user_id).filter_by(user_transactions_id=user_transactions_id).first()
+    return session.query(User_Transactions).filter_by(user_id=user_id).filter_by(user_transactions_id=user_transactions_id).first()
 
 def create_user_transaction(user_transactions_name, user_transactions_amount, user_transactions_date, budget_id, category_id, user_id, user_transactions_processed, img): 
     """ Create User Transaction """
