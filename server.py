@@ -366,10 +366,11 @@ def user_advice():
     if min_price or max_price: 
         users_advice = crud.filter_user_advice_by_price(user.user_id, min_price, max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
     else:
-        users_advice = crud.get_advice_by_user_id(user.user_id).paginate(page=int(page), per_page=ROWS_PER_PAGE)
+        users_advice = crud.get_advice_by_user_id(user.user_id)
+        # .paginate(page=int(page), per_page=ROWS_PER_PAGE)
     
     advice_list = []
-    advice_list.append(users_advice.total)
+    # advice_list.append(users_advice.total)
     for product in users_advice.items: 
         advice_item = {}
         advice_item["advice_id"] = str(product.advice_id)
