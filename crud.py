@@ -153,8 +153,8 @@ def update_user_transaction(id,entity):
 
 def delete_transaction(id):
     """Delete Transaction"""
-    session.query(User_Transactions).filter_by(user_transactions_id=id).delete()
-    return f"Deleted transaction id: {id}"
+    return session.query(User_Transactions).filter_by(user_transactions_id=id).delete()
+    # return f"Deleted transaction id: {id}"
 
 def filter_by_date(user_id, start_date, end_date): 
     """Get all transactions by date range"""
