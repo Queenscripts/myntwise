@@ -371,7 +371,7 @@ def user_advice():
     
     advice_list = []
     # advice_list.append(users_advice.total)
-    for product in users_advice.items: 
+    for product in users_advice: 
         advice_item = {}
         advice_item["advice_id"] = str(product.advice_id)
         advice_item["advice_name"] = str(product.advice_name)
