@@ -94,15 +94,15 @@ def create_budget(budget_name, budget_amount, budget_description, budget_frequen
 
 def get_budgets_and_transactions(user_id):
     """Get all budgets"""
-    return db.session.query(Budget, User_Transactions).filter_by(user_id=user_id).join(User_Transactions, Budget.budget_id==User_Transactions.budget_id, isouter=True).all()
+    return session.query(Budget, User_Transactions).filter_by(user_id=user_id).join(User_Transactions, Budget.budget_id==User_Transactions.budget_id, isouter=True).all()
 
 def get_user_budgets(user_id):
     """" Get all budgets for user """
-    return Budget.query.filter_by(user_id=user_id).all()
+    return session.query(Budget).filter_by(user_id=user_id).all()
 
 def get_budget_by_name(budget_name):
     """Get budget info by name"""
-    return Budget.query.filter_by(budget_name=budget_name).first()
+    return session.query(Budget).filter_by(budget_name=budget_name).first()
 
 def delete_budget(id):
     """Delete Budget"""
