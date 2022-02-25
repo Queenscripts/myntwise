@@ -159,7 +159,7 @@ def logout():
 def delete_budget(id):
     """Route to delete budget"""
     crud.delete_budget(id)
-    db.session.commit()
+    # db.session.commit()
     return redirect("/budgets")
 # #@TODO Route for update
 
@@ -266,7 +266,7 @@ def saved_transactions():
 def delete_transaction(id):
     """Route to delete transaction"""
     crud.delete_transaction(id)
-    db.session.commit()
+    # db.session.commit()
     return redirect("/dashboard#transactions")
 
 
