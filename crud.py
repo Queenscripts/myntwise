@@ -36,7 +36,7 @@ def get_user(id):
 
 def get_user_by_email(email): 
     """ Get user by email """
-    return session.query(User).filter_by(email=email).first()
+    return session.query(User).filter(email=email).first()
 
 # CRUD FOR CATEGORIES
 def get_categories():
@@ -106,7 +106,8 @@ def get_budget_by_name(budget_name):
 
 def delete_budget(id):
     """Delete Budget"""
-    session.query(Budget).filter_by(budget_id=id).delete()
+    obj= session.query(Budget).filter(Budget.budget_id==id).first()
+    session.delete(obj)
     session.commit()
     return f"Deleted budget id: {id}"
 
