@@ -106,8 +106,8 @@ def get_budget_by_name(budget_name):
 
 def delete_budget(id):
     """Delete Budget"""
-    Budget.query.filter_by(budget_id=id).delete()
-    db.session.commit()
+    session.query(Budget).filter_by(budget_id=id).delete()
+    session.commit()
     return f"Deleted budget id: {id}"
 
 def update_budget(id,entity):
@@ -127,18 +127,21 @@ def get_user_transaction(user_id, user_transactions_id):
 
 def create_user_transaction(user_transactions_name, user_transactions_amount, user_transactions_date, budget_id, category_id, user_id, user_transactions_processed, img): 
     """ Create User Transaction """
-    transaction = User_Transactions(
-        user_transactions_name=user_transactions_name, 
-        user_transactions_amount=user_transactions_amount, 
-        user_transactions_date=user_transactions_date, 
-        budget_id=budget_id, 
-        category_id=category_id,
-        user_id=user_id,
-        user_transactions_processed=user_transactions_processed,
-        img=img
-    )
-    db.session.add(transaction)
-    db.session.commit()
+    new_transaction = Table("user_transactions", metadata, autoload=True)
+    engine.execute(new_transaction.insert(), user_transactions_name=user_transactions_name, user_transactions_amount=user_transactions_amount, user_transactions_date=user_transactions_date, budget_id=budget_id, category_id=category_id, user_id=user_id,user_transactions_processed=user_transactions_processed,img=img)
+    transaction = Session(engine).query(User_Transactions).filter_by(user_transactions_name=user_transactions_name).first()
+    # transaction = User_Transactions(
+    #     user_transactions_name=user_transactions_name, 
+    #     user_transactions_amount=user_transactions_amount, 
+    #     user_transactions_date=user_transactions_date, 
+    #     budget_id=budget_id, 
+    #     category_id=category_id,
+    #     user_id=user_id,
+    #     user_transactions_processed=user_transactions_processed,
+    #     img=img
+    # )
+    # db.session.add(transaction)
+    # db.session.commit()
     return transaction
     
 def update_user_transaction(id,entity):
