@@ -206,8 +206,8 @@ def transactions():
         else:
             new_user_transaction = crud.create_user_transaction(user_transactions_name,user_transactions_amount, user_transactions_date,budget.budget_id,category.category_id, user.user_id, user_transactions_processed, img)
 
-            db.session.add(new_user_transaction)
-            db.session.commit()
+            # db.session.add(new_user_transaction)
+            # db.session.commit()
             new_budget = crud.get_budget_by_id(new_user_transaction.budget_id)
             new_category = crud.get_category_by_id(new_user_transaction.category_id)
         # flash(f"New user_transaction: {new_user_transaction.user_transactions_name}")
