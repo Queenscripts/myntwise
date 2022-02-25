@@ -511,7 +511,7 @@ def display_reports():
     return jsonify(user_report)
 
 if __name__ == "__main__": 
-    app.debug = True 
+    app.debug = False 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
@@ -523,4 +523,4 @@ if __name__ == "__main__":
 
     
         
-    app.run(host='127.0.0.1',debug=True)
+    app.run(host='127.0.0.1',debug=False)
