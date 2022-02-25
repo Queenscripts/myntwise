@@ -266,6 +266,7 @@ def saved_transactions():
 def delete_transaction(id):
     """Route to delete transaction"""
     crud.delete_transaction(id)
+    Session(engine).commit()
     # db.session.commit()
     return redirect("/dashboard#transactions")
 
