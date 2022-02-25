@@ -370,7 +370,7 @@ def user_advice():
         # .paginate(page=int(page), per_page=ROWS_PER_PAGE)
     
     advice_list = []
-    advice_list.append(len(users_advice))
+    advice_list.append(len(Session(engine).query(users_advice)))
     for product in users_advice: 
         advice_item = {}
         advice_item["advice_id"] = str(product.advice_id)
