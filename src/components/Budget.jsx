@@ -60,14 +60,14 @@ function BudgetForm(props) {
           throw new Error(`${res.status}, ${res.statusText}`);
         } else {
           const budget = await res.json();
-          console.log(budget)
+          
           props.setBudgets([...props.budgets,budget])
           setState({
-            budget_name:"", 
-            budget_amount:"", 
-            budget_description:"", 
-            budget_frequency:"", 
-            category:"",
+            budget_name: null, 
+            budget_amount: null, 
+            budget_description: null, 
+            budget_frequency: null, 
+            category: null,
           });
         }
     } catch (e) {
@@ -152,6 +152,7 @@ function BudgetForm(props) {
                   name="budget_description"
                   id="budget_description"
                   autocomplete="email"
+                  value={state.budget_description}
                   class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-lg sm:text-sm border-gray-300 rounded-md"
                 >
                   {" "}
@@ -173,6 +174,7 @@ function BudgetForm(props) {
                       budget_frequency: e.target.value
                     })
                   }
+                  value={state.budget_frequency}
                   id="budget_frequency"
                   name="budget_frequency"
                   autocomplete="budget_frequency-name"
@@ -199,6 +201,7 @@ function BudgetForm(props) {
                       category: e.target.value
                     })
                   }
+                  value={state.category}
                   id="category"
                   name="category"
                   autocomplete="budget_category-name"

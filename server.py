@@ -413,8 +413,8 @@ def display_budgets():
 
         new_budget = crud.create_budget(budget_name,budget_amount,budget_description,budget_frequency, user.user_id, category.category_id)
         new_category = crud.get_category_by_id(new_budget.category_id)
-        db.session.add(new_budget)
-        db.session.commit()
+        # db.session.add(new_budget)
+        # db.session.commit()
         return jsonify({
             "budget_id": new_budget.budget_id,
             "budget_name":new_budget.budget_name,
