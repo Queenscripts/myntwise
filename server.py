@@ -291,34 +291,31 @@ def advice():
     ROWS_PER_PAGE = 9
     page = request.args.get('page')
     advice_list = []
-
-    # if page:
-    #     advice = crud.get_advice().all()
-    #     advice_list.append(len(advice))
-
-    #     # advice_list.append(len(advice.items))
-    #     for product in advice: 
-    #         advice_item = {}
-    #         advice_item["advice_id"] = str(product.advice_id)
-    #         advice_item["advice_name"] = str(product.advice_name)
-    #         advice_item["advice_description"] = str(product.advice_description)
-    #         advice_item["advice_price"] = str(product.advice_price)
-    #         advice_item["advice_img"] = str(product.advice_img)
-    #         advice_item["advice_info_id"] = str(product.advice_info_id)
-    #         advice_list.append(advice_item)
-    # else: 
-    advice = crud.get_advice().all()
-    advice_list.append(len(advice))
-    for product in advice: 
-        advice_item = {}
-        advice_item["advice_id"] = str(product.advice_id)
-        advice_item["advice_name"] = str(product.advice_name)
-        advice_item["advice_description"] = str(product.advice_description)
-        advice_item["advice_price"] = str(product.advice_price)
-        advice_item["advice_img"] = str(product.advice_img)
-        advice_item["advice_info_id"] = str(product.advice_info_id)
-        advice_list.append(advice_item)
-    print('ADVICE$', advice_list)
+    if page:
+        advice =  Advice.query.paginate(page=int(page), per_page=ROWS_PER_PAGE)
+        advice_list.append(len(Advice.query.all()))
+        for product in advice.items: 
+            advice_item = {}
+            advice_item["advice_id"] = str(product.advice_id)
+            advice_item["advice_name"] = str(product.advice_name)
+            advice_item["advice_description"] = str(product.advice_description)
+            advice_item["advice_price"] = str(product.advice_price)
+            advice_item["advice_img"] = str(product.advice_img)
+            advice_item["advice_info_id"] = str(product.advice_info_id)
+            advice_list.append(advice_item)
+    else: 
+        advice = crud.get_advice().all()
+        advice_list.append(len(advice))
+        for product in advice: 
+            advice_item = {}
+            advice_item["advice_id"] = str(product.advice_id)
+            advice_item["advice_name"] = str(product.advice_name)
+            advice_item["advice_description"] = str(product.advice_description)
+            advice_item["advice_price"] = str(product.advice_price)
+            advice_item["advice_img"] = str(product.advice_img)
+            advice_item["advice_info_id"] = str(product.advice_info_id)
+            advice_list.append(advice_item)
+    
     return jsonify(advice_list)
 
 @app.route("/api/advice/price")
@@ -364,14 +361,13 @@ def user_advice():
 
     user = crud.get_user_by_email(session["user_email"])
     if min_price or max_price: 
-        users_advice = crud.filter_user_advice_by_price(user.user_id, min_price, max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
+        users_advice = Advice.query.filter_by(user_id=user.user_id,min_price=min_price, max_price=max_price).paginate(page=int(page), per_page=ROWS_PER_PAGE)
     else:
-        users_advice = crud.get_advice_by_user_id(user.user_id)
-        # .paginate(page=int(page), per_page=ROWS_PER_PAGE)
+        users_advice = Advice.query.filter_by(user_id=user.user_id).paginate(page=int(page), per_page=ROWS_PER_PAGE)
     
     advice_list = []
-    advice_list.append(len(Session(engine).query(Advice).filter(user.user_id==Advice.user_id).all()))
-    for product in users_advice: 
+    advice_list.append(len(Advice.query.filter_by(user_id=user.user_id).all()))
+    for product in users_advice.items: 
         advice_item = {}
         advice_item["advice_id"] = str(product.advice_id)
         advice_item["advice_name"] = str(product.advice_name)
@@ -485,7 +481,6 @@ def display_reports():
             transaction_price_range["user_transactions_id"],transaction_price_range["user_transactions_name"],transaction_price_range["transaction_amount"],transaction_price_range["transaction_date"],transaction_price_range["transaction_budget"],transaction_price_range["transaction_category"]=transaction.user_transactions_id, transaction.user_transactions_name, transaction.user_transactions_amount, transaction.user_transactions_date, budget.budget_name, category.category_name
             transactions_by_price.append(transaction_price_range)
     user_report["price_ranged_transactions"] = transactions_by_price
-    print('BUDGET', budget_amount)
     if budget_amount[0][0]:
         user_report["total_budget_amount"] = int(budget_amount[0][0])
     user_report["budget_count"] = int(budget_count)
@@ -512,7 +507,7 @@ def display_reports():
     return jsonify(user_report)
 
 if __name__ == "__main__": 
-    app.debug = False 
+    app.debug = True 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
@@ -524,4 +519,4 @@ if __name__ == "__main__":
 
     
         
-    app.run(host='127.0.0.1',debug=False)
+    app.run(host='127.0.0.1',debug=True)

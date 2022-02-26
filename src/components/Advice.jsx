@@ -77,7 +77,7 @@ function Slider (props){
       <div className="slider__left-value">{minVal}</div>
       <div className="slider__right-value">{maxVal}</div>
     </div>
-  </div>
+    </div>
   )
 
 }
@@ -98,6 +98,7 @@ const ReadMore = ({ children }) => {
   );
 };
 export default function Advice(props) {
+  const [message, setMessage] = React.useState("Added!")
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState(null);
   const [advice, setAdvice] = React.useState(null);
@@ -108,7 +109,7 @@ export default function Advice(props) {
   const [pageNumber, setPageNumber] = React.useState(null);
   const [searchVal, setSearchVal] = React.useState(null);
   const [visible, setVisible] = React.useState(false);
-  // const [currentPage, setCurrentPage] = React.useState(1)
+  const [currentPage, setCurrentPage] = React.useState(1)
   const [clickedPageNumber, setClickedPageNumber] = React.useState(1);
   const indexOfLast = clickedPageNumber * 9
   const indexOfFirst = indexOfLast - 9
@@ -173,7 +174,6 @@ export default function Advice(props) {
     )
   }, [clickedPageNumber]);}
 
-
   // Fetch for all price max and in value
   React.useEffect(() => {
     // Extract separate fetch call in new API request file
@@ -220,7 +220,6 @@ export default function Advice(props) {
       body: JSON.stringify(data)
     });
     if (res.ok) {
-      console.log("RESsave", res.json())
     } else {
       throw new Error(`${res.status} ${res.statusText}`);
     }
@@ -278,10 +277,9 @@ export default function Advice(props) {
     )
   }
 
-
   return (
     <>
-    <Modal open={open} setOpen={setOpen} error={error} component={"Advice"}/>
+    <Modal open={open} setOpen={setOpen} error={error} component={"Advice"} message={message}/>
     <div class="flex flex-col p-4">
       <section class="flex align-center items-center">
       <div className="flex flex-col">
@@ -334,10 +332,13 @@ export default function Advice(props) {
         </div>
       </div>
       </section>
-      <div class="my-1 px-10 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-50 gap-5">
+     
         {/* Sort Search Section */}
         {/* Advice Card */}
-        { advice &&  filteredAdvice && filteredAdvice.length>0 ? filteredAdvice.slice(1,filteredAdvice.length).map(product=> {return(
+        { advice &&  filteredAdvice && filteredAdvice.length>0 ?  
+        <div class="my-1 px-10 w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 p-50 gap-5">
+          {filteredAdvice.slice(1,filteredAdvice.length).map(product=> {
+          return(
           <article class="flex flex-col overflow-hidden rounded-lg shadow-lg">
             <button
               class="no-underline text-grey-darker hover:text-red-dark self-end p-4"
@@ -414,19 +415,20 @@ export default function Advice(props) {
           {% set count.value = count.value + 1 %} */}
               </p>
             </footer>
-          </article>)}): 
+          </article>
+         )}) }</div>: 
           <div class="container mx-auto px-4 flex flex-col lg:flex-row">
-            <div class="juice relative lg:w-2/3 rounded-xl bg-secondary-lite bg-cover p-8 md:p-16 bg-gradient-to-r from-cyan-500 to-blue-500" style={{backgroundImage:"url(./static/img/conifer-payment-processed-1.png)"}}>
+            <div class="juice relative w-full rounded-xl bg-secondary-lite bg-cover bg-gradient-to-r from-cyan-500 to-blue-500" style={{backgroundImage:"url(./static/img/conifer-payment-processed-1.png)", height:"100vh"}}>
               <p class="max-w-sm text-secondary text-3xl md:text-4xl font-semibold" style={{background:"#f5eaf9"}}>You have no transactions, so no advice to show!</p>
               <a href="/dashboard#transactions"><button class="mt-20 bg-white font-semibold px-8 py-2 rounded">Start by creating transactions now</button></a>
             </div>
           </div>}
-      </div>
+      
       {advice && filteredAdvice &&
       <Pagination
         advice={filteredAdvice}
         paginate={paginate}
-        postsPerPage={filteredAdvice.length-1}
+        postsPerPage={advice[0]}
         totalPosts={advice[0]}
         paginateBack={paginateBack}
         paginateFront={paginateFront}

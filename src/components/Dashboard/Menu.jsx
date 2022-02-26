@@ -26,7 +26,7 @@ function Menu(){
     let location = useLocation()
     return(
         <div class="sm:flex-cols lg:flex">
-          <nav class="flex flex-col sticky sm:top-0 bg-teal-800 w-100 lg:h-screen md:h-auto px-2 text-gray-900 border border-teal-800">
+          <nav style={{width:"20vw"}} class="flex flex-col sticky sm:top-0 bg-teal-800 w-100 lg:h-screen md:h-auto px-2 text-gray-900 border border-teal-800">
             <div class="flex flex-wrap mt-8">
               {/* <div class="w-1/2">
                 <img

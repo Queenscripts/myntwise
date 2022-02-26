@@ -11,15 +11,16 @@ export default function Pagination({
 }) {
 const pageNumbers= []
 
-if(advice)for(let i = 1; i< Math.ceil(advice[0]/9); i++){
-    pageNumbers.push(i)}
+if(advice)for(let i = 1; i< Math.ceil(postsPerPage/9)+1; i++){
+    pageNumbers.push(i)
+  }
 
   return (
     <div className='py-2'>
       <div>
         <p className='text-sm text-gray-700'>
           Showing 
-          <span className='font-medium'> {postsPerPage}{" "} </span>
+          <span className='font-medium'> { Math.ceil(advice.slice(1,advice.length).length===9?9*clickedPageNumber:advice[0])}{" "} </span>
           {" "}
           of
           <span className='font-medium'> {totalPosts} </span>
@@ -43,7 +44,9 @@ if(advice)for(let i = 1; i< Math.ceil(advice[0]/9); i++){
         </li>
 
           <li>
+          {console.log(pageNumbers)}
           {pageNumbers.slice(clickedPageNumber-1,clickedPageNumber+4).map((number) => (
+            
                 <button class="w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
                   onClick={() => {
                     paginate(number);
@@ -55,6 +58,7 @@ if(advice)for(let i = 1; i< Math.ceil(advice[0]/9); i++){
                       : "w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"
                   }
                 >
+                  
                   {number}
                   </button>
               ))}
