@@ -26,7 +26,7 @@ engine = create_engine(os.environ["POSTGRES_URI"])
 metadata = MetaData(engine)
 
 app.secret_key = "ABCSECRETDEF"
-
+db.init_app(app)
 @app.route('/google/')
 def google():
 
