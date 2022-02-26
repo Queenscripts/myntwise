@@ -293,7 +293,7 @@ def advice():
     advice_list = []
     if page:
         advice =  Advice.query.paginate(page=int(page), per_page=ROWS_PER_PAGE)
-        advice_list.append(len(Advice.query.all()))
+        advice_list.append(len(crud.get_advice().all()))
         for product in advice.items: 
             advice_item = {}
             advice_item["advice_id"] = str(product.advice_id)
