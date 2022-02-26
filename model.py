@@ -3,7 +3,11 @@ import os
 from xmlrpc.client import Boolean
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy import func
-from server import app 
+from flask import Flask, render_template, jsonify, flash, session, redirect, request, url_for
+from config import Config
+
+app = Flask(__name__, static_folder="./static")
+app.config.from_object(Config)
 
 db= SQLAlchemy()
 
