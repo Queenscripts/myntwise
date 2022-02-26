@@ -510,9 +510,9 @@ if __name__ == "__main__":
     app.debug = True 
     app.DEBUG_TB_INTERCEPT_REDIRECTS = False
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL?sslmode=require').replace('postgres://', 'postgresql://')
+    
 
-    DB_URI = app.config[SQLALCHEMY_DATABASE_URI]
+    DB_URI = app.config["SQLALCHEMY_DATABASE_URI"]
 
 
     db.init_app(app)
