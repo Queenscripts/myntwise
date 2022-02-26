@@ -16,6 +16,7 @@ from sqlalchemy.orm import Session
 
 
 app = Flask(__name__, static_folder="./static")
+db.init_app(app)
 app.config.from_object(Config)
 
 oauth = OAuth(app)
@@ -512,7 +513,7 @@ if __name__ == "__main__":
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
     DB_URI = app.config['SQLALCHEMY_DATABASE_URI']
 
-    db.init_app(app)
+    
 
     connect_to_db(app)
     DebugToolbarExtension(app)
