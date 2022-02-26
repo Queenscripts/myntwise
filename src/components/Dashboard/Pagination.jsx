@@ -44,7 +44,7 @@ if(advice)for(let i = 1; i< Math.ceil(postsPerPage/9)+1; i++){
         </li>
 
           <li>
-          {console.log(pageNumbers)}
+  
           {pageNumbers.slice(clickedPageNumber-1,clickedPageNumber+4).map((number) => (
             
                 <button class="w-10 h-10 text-indigo-600 transition-colors duration-150 rounded-full focus:shadow-outline hover:bg-indigo-100"

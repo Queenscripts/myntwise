@@ -43,7 +43,6 @@ const LineChart = React.forwardRef((props) => {
     }, [chartRef]);
   
     React.useEffect(() => {
-      console.log("CHART", chartRef.current);
     }, [chart]);
     return <canvas ref={chartRef} width="400" height="400"></canvas>;
   });

@@ -59,7 +59,6 @@ const PieChart = React.forwardRef((props) => {
   }, [chartRef, props]);
 
   React.useEffect(() => {
-    console.log(props.data)
   }, [props]);
   return <canvas ref={chartRef} width="400" height="400"></canvas>;
 });
