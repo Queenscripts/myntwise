@@ -3,10 +3,10 @@ import React from 'react';
 export default function SignUp(){
     return(
       <div class="flex flex-col p-4" style={{height:"100vh"}}>
-        <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
+        <div class="flex items-center justify-center">
+    <div class="w-full">
       <div>
-        <img class="mx-auto h-12 w-auto" src="static/favicon_io/favicon-32x32.png" alt="Workflow"/>
+        <img class="w-auto" src="static/favicon_io/favicon-32x32.png" alt="Workflow"/>
         <h1 class="mt-6 text-center text-3xl font-extrabold text-teal-900">
           Sign up for MyntWise
         </h1>
