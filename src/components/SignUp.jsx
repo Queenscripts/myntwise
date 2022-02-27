@@ -2,11 +2,11 @@ import React from 'react';
 
 export default function SignUp(){
     return(
-      <div class="flex flex-col p-4" style={{height:"100vh"}}>
-        <div class="flex items-center justify-center">
-    <div class="w-full">
+        <>
+        <div style={{height:"65vh"}} class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
       <div>
-        <img class="w-auto" src="static/favicon_io/favicon-32x32.png" alt="Workflow"/>
+        <img class="mx-auto h-12 w-auto" src="static/favicon_io/favicon-32x32.png" alt="Workflow"/>
         <h1 class="mt-6 text-center text-3xl font-extrabold text-teal-900">
           Sign up for MyntWise
         </h1>
@@ -34,7 +34,7 @@ export default function SignUp(){
           </div>
         </div>
   
-        <div class="flex items-center justify-between">
+        {/* <div class="flex items-center justify-between">
           <div class="flex items-center">
             <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"/>
             <label for="remember-me" class="ml-2 block text-sm text-gray-900">
@@ -47,7 +47,7 @@ export default function SignUp(){
               Already a member or forgot your password?
             </a>
           </div>
-        </div>
+        </div> */}
   
         <div>
           <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
@@ -73,6 +73,6 @@ export default function SignUp(){
       {/* Illustration by <a href="https://icons8.com/illustrations/author/60ab64bc8e3740e9be238b13">Tatyana Krasutskaya</a> from <a href="https://icons8.com/illustrations">Ouch!</a> */}
     </div>
   </div>
-  </div>
+        </>
     )
 }
