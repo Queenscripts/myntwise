@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function SignUp(){
     return(
-        <>
+      <div class="flex flex-col p-4" style={{height:"100vh"}}>
         <div class="flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
       <div>
@@ -73,6 +73,6 @@ export default function SignUp(){
       {/* Illustration by <a href="https://icons8.com/illustrations/author/60ab64bc8e3740e9be238b13">Tatyana Krasutskaya</a> from <a href="https://icons8.com/illustrations">Ouch!</a> */}
     </div>
   </div>
-        </>
+  </div>
     )
 }
